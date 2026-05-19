@@ -271,7 +271,7 @@
         </header>
         <main>
             <div class="left-panel">
-                <img src="http://localhost/my-node-form/data/media/avatar.png" class="avatar" alt="Алиса">
+                <img src="./data/media/avatar.png" class="avatar" alt="Алиса">
                 <div class="bubble" id="bubble1">
                     <strong>Приветствую тебя!<br>Меня зовут Алиса Шарко.</strong><br><br>
                     Я преподаю танцы для девушек более 10 лет,<br><br>
@@ -287,15 +287,15 @@
                 <a href="login.html" class="btn-register">Записаться</a>
             </div>
             <div class="main-photo-section">
-                <img src="http://localhost/my-node-form/data/media/Imgg_182.jpg" class="main-photo" alt="main">
+                <img src="./data/media/Imgg_182.jpg" class="main-photo" alt="main">
                 <div class="slider" id="sliderContainer">
-                    <video id="video1" muted loop preload="metadata" poster="http://localhost/my-node-form/data/media/slide1.png"
+                    <video id="video1" muted loop preload="metadata" poster="./data/media/slide1.png"
                            onclick="window.open('https://vk.com/video-11836916_456239120', '_blank')">
-                        <source src="http://localhost/my-node-form/data/media/slide1.mp4" type="video/mp4">
+                        <source src="./data/media/slide1.mp4" type="video/mp4">
                     </video>
-                    <video id="video2" muted loop preload="metadata" poster="http://localhost/my-node-form/data/media/slide2.png"
+                    <video id="video2" muted loop preload="metadata" poster="./data/media/slide2.png"
                            onclick="window.open('https://vk.com/video-11836916_456239134', '_blank')">
-                        <source src="http://localhost/my-node-form/data/media/slide2.mp4" type="video/mp4">
+                        <source src="./data/media/slide2.mp4" type="video/mp4">
                     </video>
                 </div>
                 <div class="slider-nav">
@@ -328,10 +328,10 @@
                 if (index < 0) index = videoPairs.length - 1;
                 if (index >= videoPairs.length) index = 0;
 
-                video1.poster = `http://localhost/my-node-form/data/media/${videoPairs[index][0]}.png`;
-                video1.children[0].src = `http://localhost/my-node-form/data/media/${videoPairs[index][0]}.mp4`;
-                video2.poster = `http://localhost/my-node-form/data/media/${videoPairs[index][1]}.png`;
-                video2.children[0].src = `http://localhost/my-node-form/data/media/${videoPairs[index][1]}.mp4`;
+                video1.poster = `./data/media/${videoPairs[index][0]}.png`;
+                video1.children[0].src = `./data/media/${videoPairs[index][0]}.mp4`;
+                video2.poster = `./data/media/${videoPairs[index][1]}.png`;
+                video2.children[0].src = `./data/media/${videoPairs[index][1]}.mp4`;
 
                 video1.load();
                 video2.load();
