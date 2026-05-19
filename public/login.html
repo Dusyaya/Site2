@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход — Школа танца</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/inputmask@5.0.8/dist/inputmask.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .left {
+            flex: 1;
+            padding: 100px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #fff;
+        }
+
+        .right {
+            flex: 1;
+            background-image: url('http://localhost/my-node-form/data/media/Imgg_182.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        h2 {
+            font-weight: bold;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #eee;
+            border-radius: 25px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background-color: #fa98c8;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: background-color 0.2s ease;
+        }
+
+            button:hover {
+                background-color: #e47ab2;
+            }
+
+        .switch-form {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+            .switch-form a {
+                color: #fa98c8;
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+                .switch-form a:hover {
+                    text-decoration: underline;
+                }
+    </style>
+</head>
+<body>
+    <div class="left">
+        <h2 id="formTitle">Регистрация</h2>
+        <p id="formSubtitle">Введите информацию для записи на занятия</p>
+
+        <!-- Форма регистрации -->
+        <form id="registerForm">
+            <div id="registerFields">
+                <input type="text" name="name" placeholder="ФИО" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="tel" name="phone" placeholder="Номер телефона" required>
+                <input type="password" name="password" placeholder="Пароль" required>
+                <button type="submit">Зарегистрироваться</button>
+                <div class="switch-form">
+                    Уже есть аккаунт? <a href="#" id="showLogin">Войти</a>
+                </div>
+            </div>
+        </form>
+
+        <!-- Форма входа -->
+        <form id="loginForm" style="display: none;">
+            <div id="loginFields">
+                <input type="email" name="loginEmail" placeholder="Email" required>
+                <input type="password" name="loginPassword" placeholder="Пароль" required>
+                <button type="submit">Войти</button>
+                <div class="switch-form">
+                    Нет аккаунта? <a href="#" id="showRegister">Зарегистрироваться</a>
+                </div>
+            </div>
+        </form>
+
+        <div id="message" style="margin-top: 20px; text-align: center;"></div>
+    </div>
+    <div class="right"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const registerForm = document.getElementById('registerForm');
+            const loginForm = document.getElementById('loginForm');
+            const message = document.getElementById('message');
+            const showLogin = document.getElementById('showLogin');
+            const showRegister = document.getElementById('showRegister');
+            const formTitle = document.getElementById('formTitle');
+            const formSubtitle = document.getElementById('formSubtitle');
+            const phoneInput = registerForm.querySelector('input[name="phone"]');
+
+            // Маска телефона
+            if (phoneInput && Inputmask) {
+                Inputmask("+7 (999) 999-99-99", {
+                    showMaskOnHover: false,
+                    showMaskOnFocus: true,
+                    clearIncomplete: true
+                }).mask(phoneInput);
+            }
+
+            // Переключение между формами
+            showLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                formTitle.textContent = 'Вход';
+                formSubtitle.textContent = 'Введите свои учетные данные';
+                message.innerHTML = '';
+            });
+
+            showRegister.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+                formTitle.textContent = 'Регистрация';
+                formSubtitle.textContent = 'Введите информацию для записи на занятия';
+                message.innerHTML = '';
+            });
+
+            // Регистрация (без проверки)
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const name = registerForm.name.value.trim();
+                const email = registerForm.email.value.trim();
+                const phone = registerForm.phone.value;
+                const password = registerForm.password.value;
+
+                if (!name || !email || !phone || !password) {
+                    message.style.color = 'red';
+                    message.innerHTML = 'Заполните все поля!';
+                    return;
+                }
+
+                // Создаем пользователя в localStorage
+                const newUser = {
+                    id: Date.now().toString(),
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    password: password,
+                    groups: [],
+                    subscriptions: [],
+                    createdAt: new Date().toISOString()
+                };
+
+                // Сохраняем пользователей
+                let users = JSON.parse(localStorage.getItem('demo_users') || '[]');
+                users.push(newUser);
+                localStorage.setItem('demo_users', JSON.stringify(users));
+
+                // Сохраняем текущего пользователя
+                localStorage.setItem('currentUser', JSON.stringify({
+                    id: newUser.id,
+                    name: newUser.name,
+                    email: newUser.email,
+                    phone: newUser.phone,
+                    groups: newUser.groups,
+                    subscriptions: newUser.subscriptions
+                }));
+
+                message.style.color = 'green';
+                message.innerHTML = 'Регистрация успешна! Перенаправление...';
+
+                setTimeout(() => {
+                    window.location.href = 'account.html';
+                }, 1000);
+            });
+
+            // Вход (без проверки пароля, просто по email)
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const email = loginForm.loginEmail.value.trim();
+                const password = loginForm.loginPassword.value;
+
+                if (!email || !password) {
+                    message.style.color = 'red';
+                    message.innerHTML = 'Заполните все поля!';
+                    return;
+                }
+
+                let users = JSON.parse(localStorage.getItem('demo_users') || '[]');
+
+                // Ищем пользователя по email (пароль не проверяем)
+                let user = users.find(u => u.email === email);
+
+                // Если пользователь не найден, создаем автоматически
+                if (!user) {
+                    user = {
+                        id: Date.now().toString(),
+                        name: email.split('@')[0],
+                        email: email,
+                        phone: '+7 (999) 000-00-00',
+                        password: password,
+                        groups: [],
+                        subscriptions: [],
+                        createdAt: new Date().toISOString()
+                    };
+                    users.push(user);
+                    localStorage.setItem('demo_users', JSON.stringify(users));
+                    message.innerHTML = 'Новый аккаунт создан!';
+                } else {
+                    message.innerHTML = 'Вход выполнен!';
+                }
+
+                // Сохраняем текущего пользователя
+                localStorage.setItem('currentUser', JSON.stringify({
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    phone: user.phone,
+                    groups: user.groups || [],
+                    subscriptions: user.subscriptions || []
+                }));
+
+                message.style.color = 'green';
+
+                setTimeout(() => {
+                    window.location.href = 'account.html';
+                }, 1000);
+            });
+
+            // Проверка авторизации
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                window.location.href = 'account.html';
+            }
+        });
+    </script>
+</body>
+</html>

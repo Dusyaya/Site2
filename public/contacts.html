@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Контакты — Школа танца</title>
+    <style>
+        @font-face {
+            font-family: 'Futura PT';
+            src: url('https://fonts.example.com/futurapt-regular.woff2') format('woff2'), url('https://fonts.example.com/futurapt-regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Futura PT';
+            src: url('https://fonts.example.com/futurapt-medium.woff2') format('woff2'), url('https://fonts.example.com/futurapt-medium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Futura PT';
+            src: url('https://fonts.example.com/futurapt-bold.woff2') format('woff2'), url('https://fonts.example.com/futurapt-bold.woff') format('woff');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Futura PT';
+            src: url('https://fonts.example.com/futurapt-heavy.woff2') format('woff2'), url('https://fonts.example.com/futurapt-heavy.woff') format('woff');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        * {
+            font-family: 'Futura PT', sans-serif !important;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Futura PT', sans-serif;
+            background-color: white;
+            color: black;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        header {
+            background: #FA98C8;
+            padding: 40px 360px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 104px;
+            flex-grow: 1;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            line-height: 0.9;
+            font-family: 'Futura PT', sans-serif;
+        }
+
+            .logo .top {
+                font-weight: 700;
+                font-size: 22px;
+            }
+
+            .logo .bottom {
+                font-weight: 400;
+                font-size: 22px;
+            }
+
+        nav {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+            nav a {
+                text-decoration: none;
+                color: #FFCFE7;
+                font-size: 24px;
+                font-weight: 500;
+                transition: color 0.3s;
+                font-family: 'Futura PT', sans-serif;
+            }
+
+                nav a:hover {
+                    color: #FAF4FF;
+                }
+
+                nav a.active {
+                    color: #FFFFFF;
+                }
+
+            nav .button {
+                background-color: #000;
+                color: #FA98C8;
+                padding: 8px 16px;
+                border-radius: 20px;
+                margin-left: 20px;
+                transition: background-color 0.3s;
+                text-decoration: none;
+                font-size: 24px;
+                font-weight: 500;
+            }
+
+                nav .button:hover {
+                    background-color: #333;
+                }
+
+        .signup-button {
+            background-color: white;
+            color: #FA98C8;
+            padding: 8px 20px;
+            border-radius: 25px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+            .signup-button:hover {
+                background-color: #FFCFE7;
+            }
+
+            .signup-button:active {
+                background-color: #A1004F;
+            }
+
+        .logout {
+            color: white;
+            font-size: 24px;
+            font-weight: 400;
+            text-decoration: underline;
+        }
+
+        .contacts-wrapper {
+            padding: 120px 360px;
+        }
+
+        .page-title {
+            color: #120020;
+            font-size: 64px;
+            font-weight: 600;
+            line-height: 20px;
+            margin-bottom: 80px;
+        }
+
+        .contacts-section {
+            display: flex;
+            gap: 64px;
+            align-items: flex-start;
+            flex-wrap: nowrap;
+        }
+
+        .contacts-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .contact-block {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .section-title {
+            color: #A1004F;
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 76px;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-item {
+            font-size: 24px;
+            line-height: 32px;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+            .contact-item img {
+                width: 24px;
+                height: 24px;
+            }
+
+        .contact-form {
+            flex: 1;
+            background: #FAF4FF;
+            border-radius: 23px;
+            padding: 70px;
+        }
+
+        .form-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #A1004F;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #000;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            border: 1px solid #FFCFE7;
+            border-radius: 8px;
+            background: white;
+            font-family: 'Futura PT', sans-serif;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            border: 1px solid #FFCFE7;
+            border-radius: 8px;
+            background: white;
+            min-height: 120px;
+            resize: vertical;
+            font-family: 'Futura PT', sans-serif;
+        }
+
+        .form-submit {
+            background: #A1004F;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-family: 'Futura PT', sans-serif;
+        }
+
+            .form-submit:hover {
+                background: #7A003C;
+            }
+
+        .map-container {
+            margin-top: 80px;
+            width: 100%;
+            height: 400px;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .footer {
+            background: #F4E5FF;
+            padding: 60px 360px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            color: #FA98C8;
+        }
+
+        .footer-column {
+            font-size: 22px;
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 24px;
+        }
+
+            .footer-column a {
+                display: block;
+                color: #FA98C8;
+                text-decoration: none;
+                margin-bottom: 8px;
+                font-size: 22px;
+                transition: color 0.3s;
+                font-family: 'Futura PT', sans-serif;
+            }
+
+                .footer-column a:hover {
+                    color: #A1004F;
+                }
+
+        .social-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .social-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+            .social-link img {
+                width: 22px;
+                height: 22px;
+            }
+
+        .footer-logo {
+            font-size: 24px;
+            line-height: 0.9;
+        }
+
+        .footer-phone {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        /* Стили для уведомлений */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #A1004F;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <header>
+            <div class="header-left">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="http://localhost/my-node-form/data/media/avatar.png" alt="Логотип" height="40" style="background: none;">
+                    <div class="logo">
+                        <div class="top">ШКОЛА ТАНЦА</div>
+                        <div class="bottom">Алисы Шарко</div>
+                    </div>
+                </div>
+                <nav>
+                    <a href="home.html">Главная</a>
+                    <a href="schedule.html">Расписание</a>
+                    <a href="subscriptions.html">Абонементы</a>
+                    <a href="about.html">О нас</a>
+                    <a href="contacts.html" class="active">Контакты</a>
+                </nav>
+            </div>
+            <a href="login.html" class="signup-button">Записаться</a>
+        </header>
+
+        <!-- CONTACTS WRAPPER -->
+        <div class="contacts-wrapper">
+            <div class="page-title">КОНТАКТЫ</div>
+
+            <div class="contacts-section">
+                <div class="contacts-info">
+                    <div class="contact-block">
+                        <div class="section-title">Адрес</div>
+                        <div class="contact-item">
+                            г. Севастополь, ул. Северная, 2</br>
+                            г. Севастополь, ул. Адмирала Фадева, 48
+                        </div>
+                    </div>
+
+                    <div class="contact-block">
+                        <div class="section-title">Телефон</div>
+                        <div class="contact-item">
+                            +7 (978) 000-00-00
+                        </div>
+                    </div>
+
+                    <div class="contact-block">
+                        <div class="section-title">Email</div>
+                        <div class="contact-item">
+                            info@dance-school.ru
+                        </div>
+                    </div>
+
+                    <div class="contact-block">
+                        <div class="section-title">Режим работы</div>
+                        <div class="contact-item">
+                            Пн-Вс: 9:00 - 23:00<br>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <div class="form-title">Остались вопросы?</div>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label class="form-label">Ваше имя</label>
+                            <input type="text" class="form-input" name="name" placeholder="Введите ваше имя" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" name="email" placeholder="Введите ваш email" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Телефон</label>
+                            <input type="tel" class="form-input" name="phone" placeholder="Введите ваш телефон">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Сообщение</label>
+                            <textarea class="form-textarea" name="message" placeholder="Введите ваше сообщение" required></textarea>
+                        </div>
+                        <button type="submit" class="form-submit">Отправить</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="map-container">
+                <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A1a2b3c4d5e6f7g8h9i0j&amp;source=constructor" width="100%" height="100%" frameborder="0"></iframe>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-column footer-logo">
+                <strong>ШКОЛА ТАНЦА</strong><br>Алисы Шарко
+            </div>
+            <div class="footer-column">
+                <a href="home.html">Главная</a>
+                <a href="schedule.html">Расписание</a>
+                <a href="subscriptions.html">Абонементы</a>
+                <a href="about.html">О нас</a>
+                <a href="contacts.html">Контакты</a>
+            </div>
+            <div class="footer-column">
+                <div class="social-title">Соцсети:</div>
+                <div class="social-block">
+                    <div class="social-link">
+                        <img src="http://localhost/my-node-form/data/media/vk.svg" alt="VK">
+                        <a href="https://vk.com/club11836916" target="_blank">vk.com/club11836916</a>
+                    </div>
+                    <div class="social-link">
+                        <img src="http://localhost/my-node-form/data/media/tg.svg" alt="Telegram">
+                        <a href="https://t.me/atrokhina_darya" target="_blank">@atrokhina_darya</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-column">
+                Вопросы по телефону:<br>
+                <div class="footer-phone">+7 (978) 000-00-00</div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const submitBtn = this.querySelector('.form-submit');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Отправка...';
+
+            const formData = {
+                name: this.name.value,
+                email: this.email.value,
+                phone: this.phone.value,
+                message: this.message.value
+            };
+
+            fetch('/submit-contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка сети');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        showNotification(data.message);
+                        this.reset();
+                    } else {
+                        showNotification('Ошибка: ' + (data.error || 'Неизвестная ошибка'), true);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Произошла ошибка при отправке: ' + error.message, true);
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
+                });
+        });
+
+        function showNotification(message, isError = false) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.backgroundColor = isError ? '#d32f2f' : '#A1004F';
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

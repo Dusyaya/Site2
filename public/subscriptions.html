@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Абонементы — Школа танца</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Futura PT', sans-serif;
+            background-color: white;
+            color: black;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        header {
+            background: #FA98C8;
+            padding: 40px 360px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 104px;
+            flex-grow: 1;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            line-height: 0.9;
+        }
+
+            .logo .top {
+                font-weight: 700;
+                font-size: 22px;
+            }
+
+            .logo .bottom {
+                font-weight: 400;
+                font-size: 22px;
+            }
+
+        nav {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+            nav a {
+                text-decoration: none;
+                color: #FFCFE7;
+                font-size: 24px;
+                font-weight: 500;
+                transition: color 0.3s;
+            }
+
+                nav a:hover {
+                    color: #FAF4FF;
+                }
+
+                nav a.active {
+                    color: #FFFFFF;
+                }
+
+            nav .button {
+                background-color: #000;
+                color: #FA98C8;
+                padding: 8px 16px;
+                border-radius: 20px;
+                margin-left: 20px;
+                transition: background-color 0.3s;
+                text-decoration: none;
+                font-size: 24px;
+                font-weight: 500;
+            }
+
+                nav .button:hover {
+                    background-color: #333;
+                }
+
+        .signup-button {
+            background-color: white;
+            color: #FA98C8;
+            padding: 8px 20px;
+            border-radius: 25px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+            .signup-button:hover {
+                background-color: #FFCFE7;
+            }
+
+            .signup-button:active {
+                background-color: #A1004F;
+            }
+
+        .logout {
+            color: white;
+            font-size: 24px;
+            font-weight: 400;
+            text-decoration: underline;
+        }
+
+        .page-wrapper {
+            padding: 120px 560px;
+        }
+
+        .page-title {
+            color: #120020;
+            font-family: "Futura PT", sans-serif;
+            font-size: 64px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 20px;
+            margin-bottom: 80px;
+        }
+
+        .subscription {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 64px;
+            margin-bottom: 80px;
+        }
+
+        .subscription-text {
+            max-width: 480px;
+        }
+
+            .subscription-text h3 {
+                font-size: 24px;
+                font-weight: 600;
+                color: #A1004F;
+                margin-bottom: 12px;
+            }
+
+            .subscription-text p {
+                font-size: 20px;
+                line-height: 28px;
+                margin-bottom: 30px;
+            }
+
+        .subscribe-button {
+            background: #FA98C8;
+            color: white;
+            font-size: 18px;
+            font-family: 'Futura PT', sans-serif;
+            font-weight: 500;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+            .subscribe-button:hover {
+                background-color: #FFCFE7;
+                color: #A1004F;
+            }
+
+            .subscribe-button:active {
+                background-color: #A1004F;
+                color: white;
+            }
+
+
+        .subscription img {
+            width: 464px;
+            height: auto;
+            border-radius: 24px;
+            object-fit: cover;
+        }
+
+        footer {
+            background: #F4E5FF;
+            padding: 60px 360px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            color: #FA98C8;
+        }
+
+        .footer-column {
+            font-size: 22px;
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 24px;
+        }
+
+            .footer-column a {
+                display: block;
+                color: #FA98C8;
+                text-decoration: none;
+                margin-bottom: 8px;
+                font-size: 22px;
+                transition: color 0.3s;
+            }
+
+                .footer-column a:hover {
+                    color: #A1004F;
+                }
+
+        .social-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .social-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+            .social-link img {
+                width: 22px;
+                height: 22px;
+            }
+
+        .footer-logo {
+            font-size: 24px;
+            line-height: 0.9;
+        }
+
+        .footer-phone {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        /* Уведомление */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #A1004F;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Адаптация для мобильных устройств */
+        @media (max-width: 1200px) {
+            header {
+                padding: 30px 50px;
+            }
+
+            .page-wrapper {
+                padding: 60px 50px;
+            }
+
+            .subscription {
+                flex-direction: column;
+                text-align: center;
+                gap: 30px;
+            }
+
+                .subscription img {
+                    width: 100%;
+                    max-width: 400px;
+                }
+
+            footer {
+                padding: 40px 50px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 20px;
+                flex-direction: column;
+            }
+
+            .header-left {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+                nav a {
+                    font-size: 18px;
+                }
+
+            .page-wrapper {
+                padding: 40px 20px;
+            }
+
+            .page-title {
+                font-size: 40px;
+                margin-bottom: 40px;
+                text-align: center;
+            }
+
+            .subscription-text h3 {
+                font-size: 28px;
+            }
+
+            .subscription-text p {
+                font-size: 18px;
+            }
+
+            footer {
+                padding: 30px 20px;
+            }
+
+            .footer-column {
+                font-size: 16px;
+            }
+
+                .footer-column a {
+                    font-size: 16px;
+                }
+
+            .footer-phone {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <header>
+            <div class="header-left">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="http://localhost/my-node-form/data/media/avatar.png" alt="Логотип" height="40">
+                    <div class="logo">
+                        <div class="top">ШКОЛА ТАНЦА</div>
+                        <div class="bottom">Алисы Шарко</div>
+                    </div>
+                </div>
+                <nav>
+                    <a href="home.html">Главная</a>
+                    <a href="schedule.html">Расписание</a>
+                    <a href="subscriptions.html" class="active">Абонементы</a>
+                    <a href="about.html">О нас</a>
+                    <a href="contacts.html">Контакты</a>
+                </nav>
+            </div>
+            <a href="login.html" class="signup-button">Личный кабинет</a>
+        </header>
+
+        <!-- PAGE CONTENT -->
+        <div class="page-wrapper">
+            <div class="page-title">АБОНЕМЕНТЫ</div>
+
+            <div class="subscription">
+                <div class="subscription-text">
+                    <h3>8 занятий</h3>
+                    <p>Для тех, кто настроен серьёзно.<br>Срок действия абонемента — 4 недели.</p>
+                    <p>5 000 руб.</p>
+                    <button class="subscribe-button" data-subscription="8">Записаться</button>
+                </div>
+                <img src="http://localhost/my-node-form/data/media/subs1.png" alt="8 занятий">
+            </div>
+
+            <div class="subscription">
+                <div class="subscription-text">
+                    <h3>4 занятия</h3>
+                    <p>Для тех, кто любит размеренную нагрузку.<br>Срок действия абонемента — 4 недели.</p>
+                    <p>3 000 руб.</p>
+                    <button class="subscribe-button" data-subscription="4">Записаться</button>
+                </div>
+                <img src="http://localhost/my-node-form/data/media/subs2.png" alt="4 занятия">
+            </div>
+
+            <div class="subscription">
+                <div class="subscription-text">
+                    <h3>Разовое занятие</h3>
+                    <p>Идеально, чтобы познакомиться со школой!</p>
+                    <p>800 руб.</p>
+                    <button class="subscribe-button" data-subscription="1">Записаться</button>
+                </div>
+                <img src="http://localhost/my-node-form/data/media/subs3.png" alt="Разовое занятие">
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer>
+            <div class="footer-column footer-logo">
+                <strong>ШКОЛА ТАНЦА</strong><br>Алисы Шарко
+            </div>
+            <div class="footer-column">
+                <a href="home.html">Главная</a>
+                <a href="schedule.html">Расписание</a>
+                <a href="subscriptions.html">Абонементы</a>
+                <a href="about.html">О нас</a>
+                <a href="contacts.html">Контакты</a>
+            </div>
+            <div class="footer-column">
+                <div class="social-title">Соцсети:</div>
+                <div class="social-block">
+                    <div class="social-link">
+                        <img src="http://localhost/my-node-form/data/media/vk.svg" alt="VK">
+                        <a href="https://vk.com/club11836916" target="_blank">vk.com/club11836916</a>
+                    </div>
+                    <div class="social-link">
+                        <img src="http://localhost/my-node-form/data/media/tg.svg" alt="Telegram">
+                        <a href="https://t.me/atrokhina_darya" target="_blank">@atrokhina_darya</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-column">
+                Вопросы по телефону:<br>
+                <div class="footer-phone">+7 (978) 000-00-00</div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // Функция для показа уведомления
+        function showNotification(message, isError = false) {
+            // Удаляем старое уведомление, если есть
+            const oldNotification = document.querySelector('.notification');
+            if (oldNotification) {
+                oldNotification.remove();
+            }
+
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.backgroundColor = isError ? '#d32f2f' : '#A1004F';
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Функция для перенаправления на страницу входа
+        function redirectToLogin(subscriptionType) {
+            // Сохраняем выбранный абонемент в localStorage
+            localStorage.setItem('selectedSubscription', subscriptionType);
+
+            // Проверяем, авторизован ли пользователь
+            const currentUser = localStorage.getItem('currentUser');
+
+            if (currentUser) {
+                // Если пользователь уже авторизован, перенаправляем в личный кабинет
+                window.location.href = 'account.html';
+            } else {
+                // Если не авторизован, перенаправляем на страницу входа
+                showNotification('Для покупки абонемента необходимо войти в личный кабинет');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+            }
+        }
+
+        // Обработчики для всех кнопок
+        document.querySelectorAll('.subscribe-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const subscriptionType = button.getAttribute('data-subscription');
+                const subscriptionName = button.closest('.subscription').querySelector('h3').textContent;
+
+                // Сохраняем информацию о выбранном абонементе
+                localStorage.setItem('selectedSubscription', JSON.stringify({
+                    type: subscriptionType,
+                    name: subscriptionName
+                }));
+
+                // Проверяем авторизацию
+                const currentUser = localStorage.getItem('currentUser');
+
+                if (currentUser) {
+                    // Если пользователь авторизован, перенаправляем в личный кабинет
+                    showNotification(`Вы выбрали абонемент "${subscriptionName}". Перенаправление в личный кабинет...`);
+                    setTimeout(() => {
+                        window.location.href = 'account.html';
+                    }, 1000);
+                } else {
+                    // Если не авторизован, показываем сообщение и перенаправляем на вход
+                    showNotification(`Для покупки абонемента "${subscriptionName}" необходимо войти в личный кабинет`);
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
+                }
+            });
+        });
+
+        // Проверяем, есть ли выбранный абонемент после входа
+        if (window.location.search.includes('subscribed=true')) {
+            showNotification('Абонемент успешно приобретен!');
+            // Очищаем параметр из URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        // Добавляем эффект наведения на карточки
+        document.querySelectorAll('.subscription').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'scale(1.02)';
+                card.style.transition = 'transform 0.3s ease';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+[
+  {
+    "id": "1747921847501",
+    "userId": "1747921832443",
+    "type": "8",
+    "price": 5000,
+    "purchaseDate": "2025-05-22T13:50:47.451Z",
+    "expiryDate": "2025-06-19T13:50:47.451Z",
+    "remaining": 8,
+    "status": "active",
+    "groupId": "xza83ism",
+    "subscriptionNumber": "000000001",
+    "formattedDate": "22.05.2025",
+    "subscriptionName": "8 занятий",
+    "groupName": "Курс к 8 марта",
+    "teacher": "Струкова Екатерина Дмитриевна",
+    "userName": "Браузерная Брау Браувна"
+  }
+]

@@ -1,0 +1,695 @@
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const csv = require('csv-parser');
+const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
+const cors = require('cors');
+
+const app = express();
+const SECRET_KEY = 'your-secret-key-here';
+const USERS_FILE = path.join(__dirname, 'data', 'users.json');
+const GROUPS_FILE = path.join(__dirname, 'data', 'groups.csv');
+const STUDENTS_FILE = path.join(__dirname, 'data', 'students.csv');
+const SUBSCRIPTIONS_FILE = path.join(__dirname, 'data', 'subscriptions.json');
+const SUBSCRIPTIONS_CSV = path.join(__dirname, 'data', 'subscriptions.csv');
+
+// Настройки Mailtrap
+const transporter = nodemailer.createTransport({
+    host: 'sandbox.smtp.mailtrap.io',
+    port: 2525,
+    auth: {
+        user: '93f5ad449de6e7',
+        pass: '1ee26aced06acd'
+    }
+});
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.static('public'));
+
+// Middleware для логирования запросов
+
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path}`);
+    next();
+});
+
+// Функция для извлечения ID группы
+function extractGroupId(fullReference) {
+    return typeof fullReference === 'string' ? fullReference.trim() : '';
+}
+
+
+// Инициализация файлов данных
+function initializeDataFiles() {
+    const dataDir = path.join(__dirname, 'data');
+    if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true });
+    }
+
+    if (!fs.existsSync(USERS_FILE)) {
+        fs.writeFileSync(USERS_FILE, JSON.stringify([], null, 2));
+    }
+
+    if (!fs.existsSync(SUBSCRIPTIONS_FILE)) {
+        fs.writeFileSync(SUBSCRIPTIONS_FILE, JSON.stringify([], null, 2));
+    }
+
+    if (!fs.existsSync(STUDENTS_FILE)) {
+        fs.writeFileSync(STUDENTS_FILE, '\uFEFFКод;Наименование;Email;Телефон\r\n', 'utf8');
+    }
+
+    if (!fs.existsSync(SUBSCRIPTIONS_CSV)) {
+        const header = 'Номер;Дата;ТипАбонемента;НаименованиеАбонемента;Преподаватель;ИмяПреподавателя;Группа;НаименованиеГруппы;Ученик;ИмяУченика;Цена;КоличествоЗанятий\r\n';
+        fs.writeFileSync(SUBSCRIPTIONS_CSV, header, 'utf8');
+    }
+
+    if (!fs.existsSync(GROUPS_FILE)) {
+        const header = 'Ссылка;Наименование;Направление;Расписание;Преподаватель;Адрес;МаксимальноеКоличествоМест\r\n';
+        fs.writeFileSync(GROUPS_FILE, header, 'utf8');
+    }
+}
+
+// Middleware для проверки JWT
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        console.log('Токен отсутствует');
+        return res.status(401).json({ error: 'Требуется авторизация' });
+    }
+
+    jwt.verify(token, SECRET_KEY, (err, user) => {
+        if (err) {
+            console.log('Неверный токен:', err.message);
+            return res.status(403).json({ error: 'Неверный токен' });
+        }
+        req.user = user;
+        next();
+    });
+}
+
+// Валидация токена
+app.get('/api/validate-token', authenticateToken, (req, res) => {
+    res.json({ valid: true, user: req.user });
+});
+
+// Получение списка групп для расписания
+app.get('/api/schedule', (req, res) => {
+    const groups = [];
+    fs.createReadStream(GROUPS_FILE)
+        .pipe(csv({ separator: ';' }))
+        .on('data', (row) => {
+            if (row.Расписание) {
+                const scheduleParts = row.Расписание.split(',');
+                if (scheduleParts.length >= 2) {
+                    const days = scheduleParts[0].trim().split(/,\s*/);
+                    const timeRange = scheduleParts[1].trim();
+
+                    days.forEach(day => {
+                        const decodedDay = decodeDayName(day);
+                        if (decodedDay) {
+                            groups.push({
+                                name: row.Наименование,
+                                direction: row.Направление,
+                                day: decodedDay,
+                                time: timeRange.split('-')[0].replace('.', ':'),
+                                instructor: row.Преподаватель,
+                                address: row.Адрес,
+                                maxSeats: row.МаксимальноеКоличествоМест
+                            });
+                        }
+                    });
+                }
+            }
+        })
+        .on('end', () => {
+            res.json(groups.filter(g => g.day));
+        })
+        .on('error', (err) => {
+            console.error('Ошибка чтения CSV:', err);
+            res.status(500).json({ error: 'Ошибка загрузки расписания' });
+        });
+});
+
+// Функция для расшифровки дней недели
+function decodeDayName(dayName) {
+    const dayMap = {
+        'пн': 'пн', 'пон': 'пн', 'понедельник': 'пн',
+        'вт': 'вт', 'вто': 'вт', 'вторник': 'вт',
+        'ср': 'ср', 'сре': 'ср', 'среда': 'ср',
+        'чт': 'чт', 'чет': 'чт', 'четверг': 'чт',
+        'пт': 'пт', 'пят': 'пт', 'пятница': 'пт',
+        'сб': 'сб', 'суб': 'сб', 'суббота': 'сб',
+        'вс': 'вс', 'вос': 'вс', 'воскресенье': 'вс'
+    };
+
+    const key = dayName.toLowerCase().substring(0, 3);
+    return dayMap[key];
+}
+
+// Получение списка всех групп
+app.get('/api/groups', (req, res) => {
+    const groups = [];
+    fs.createReadStream(GROUPS_FILE)
+        .pipe(csv({ separator: ';' }))
+        .on('data', (row) => {
+            groups.push({
+                Ссылка: extractGroupId(row.Ссылка),
+                Наименование: row.Наименование,
+                Направление: row.Направление,
+                Расписание: row.Расписание,
+                Преподаватель: row.Преподаватель,
+                Адрес: row.Адрес,
+                МаксимальноеКоличествоМест: parseInt(row.МаксимальноеКоличествоМест) || 0
+            });
+        })
+        .on('end', () => {
+            res.json(groups);
+        })
+        .on('error', (err) => {
+            console.error('Ошибка чтения CSV:', err);
+            res.status(500).json({ error: 'Ошибка загрузки групп' });
+        });
+});
+
+// Запись в группу
+app.post('/api/join-group', authenticateToken, async (req, res) => {
+    const { groupId } = req.body;
+
+    if (!groupId) {
+        return res.status(400).json({ error: 'ID группы обязательно' });
+    }
+
+    try {
+        const groups = await new Promise((resolve, reject) => {
+            const groupsList = [];
+            fs.createReadStream(GROUPS_FILE)
+                .pipe(csv({ separator: ';' }))
+                .on('data', (row) => {
+                    groupsList.push({
+                        Ссылка: extractGroupId(row.Ссылка),
+                        Наименование: row.Наименование,
+                        Направление: row.Направление,
+                        Расписание: row.Расписание,
+                        Преподаватель: row.Преподаватель,
+                        Адрес: row.Адрес,
+                        МаксимальноеКоличествоМест: parseInt(row.МаксимальноеКоличествоМест) || 0
+                    });
+                })
+                .on('end', () => resolve(groupsList))
+                .on('error', reject);
+        });
+
+        const groupToJoin = groups.find(g => g.Ссылка === groupId);
+        if (!groupToJoin) {
+            console.error('Группа не найдена. Искали ID:', groupId, 'Доступные группы:', groups.map(g => g.Ссылка));
+            return res.status(404).json({ error: 'Группа не найдена' });
+        }
+
+        const users = getUsers();
+        const user = users.find(u => u.email === req.user.email);
+        if (!user) {
+            return res.status(404).json({ error: 'Пользователь не найден' });
+        }
+
+        if (!user.groups) user.groups = [];
+        if (user.groups.some(g => extractGroupId(g.Ссылка) === groupId)) {
+            return res.status(400).json({ error: 'Вы уже записаны в эту группу' });
+        }
+
+        if (groupToJoin.МаксимальноеКоличествоМест <= 0) {
+            return res.status(400).json({ error: 'В группе нет свободных мест' });
+        }
+
+        // Находим полные данные группы по ID
+        const fullGroupData = await new Promise((resolve, reject) => {
+            const groupsList = [];
+            fs.createReadStream(GROUPS_FILE)
+                .pipe(csv({ separator: ';' }))
+                .on('data', (row) => {
+                    if (extractGroupId(row.Ссылка) === groupId) {
+                        resolve(row);
+                    }
+                })
+                .on('end', () => resolve(null))
+                .on('error', reject);
+        });
+
+        if (!fullGroupData) {
+            return res.status(404).json({ error: 'Полные данные группы не найдены' });
+        }
+
+        user.groups.push({
+            Ссылка: fullGroupData.Ссылка,
+            Наименование: fullGroupData.Наименование,
+            Направление: fullGroupData.Направление,
+            Расписание: fullGroupData.Расписание,
+            Преподаватель: fullGroupData.Преподаватель,
+            Адрес: fullGroupData.Адрес,
+            МаксимальноеКоличествоМест: parseInt(fullGroupData.МаксимальноеКоличествоМест) || 0
+        });
+
+        saveUsers(users);
+
+        // Обновляем количество мест в группе
+        const csvHeader = 'Ссылка;Наименование;Направление;Расписание;Преподаватель;Адрес;МаксимальноеКоличествоМест\r\n';
+        const csvContent = [];
+
+        fs.createReadStream(GROUPS_FILE)
+            .pipe(csv({ separator: ';' }))
+            .on('data', (row) => {
+                const currentGroupId = extractGroupId(row.Ссылка);
+                if (currentGroupId === groupId) {
+                    const newSeats = parseInt(row.МаксимальноеКоличествоМест) - 1;
+                    csvContent.push(
+                        `${row.Ссылка};${row.Наименование};${row.Направление};${row.Расписание};` +
+                        `${row.Преподаватель};${row.Адрес};${newSeats}`
+                    );
+                } else {
+                    csvContent.push(
+                        `${row.Ссылка};${row.Наименование};${row.Направление};${row.Расписание};` +
+                        `${row.Преподаватель};${row.Адрес};${row.МаксимальноеКоличествоМест}`
+                    );
+                }
+            })
+            .on('end', () => {
+                fs.writeFileSync(GROUPS_FILE, csvHeader + csvContent.join('\r\n'), 'utf8');
+            })
+            .on('error', (err) => {
+                console.error('Ошибка обновления групп:', err);
+            });
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Ошибка:', error);
+        res.status(500).json({ error: 'Ошибка сервера' });
+    }
+});
+
+// Получение данных пользователя
+app.get('/api/user', authenticateToken, (req, res) => {
+    const users = getUsers();
+    const subscriptions = getSubscriptions();
+    const user = users.find(u => u.email === req.user.email);
+
+    if (!user) {
+        return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+
+    const userSubscriptions = subscriptions.filter(s => s.userId === user.id);
+    const { password, ...userData } = user;
+
+    res.json({
+        ...userData,
+        subscriptions: userSubscriptions,
+        token: jwt.sign({ email: user.email }, SECRET_KEY, { expiresIn: '1h' })
+    });
+});
+
+// Регистрация
+app.post('/register', async (req, res) => {
+    const { name, email, phone, password } = req.body;
+
+    if (!name || !email || !phone || !password) {
+        return res.status(400).json({ error: 'Все поля обязательны' });
+    }
+
+    const users = getUsers();
+
+    if (users.some(u => u.email === email)) {
+        return res.status(400).json({ error: 'Пользователь с таким email уже существует' });
+    }
+
+    if (users.some(u => u.phone === phone)) {
+        return res.status(400).json({ error: 'Пользователь с таким телефоном уже существует' });
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = {
+            id: Date.now().toString(),
+            name,
+            email,
+            phone,
+            password: hashedPassword,
+            groups: [],
+            createdAt: new Date().toISOString()
+        };
+
+        users.push(newUser);
+        saveUsers(users);
+
+        // Запись в CSV студентов
+        const code = getNextCode();
+        const row = `${code};${name};${email};${phone}\r\n`;
+        fs.appendFileSync(STUDENTS_FILE, row, 'utf8');
+
+        const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: '1h' });
+
+        res.json({
+            success: true,
+            token,
+            user: {
+                id: newUser.id,
+                name: newUser.name,
+                email: newUser.email,
+                phone: newUser.phone
+            }
+        });
+
+    } catch (error) {
+        console.error('Ошибка регистрации:', error);
+        res.status(500).json({ error: 'Ошибка сервера' });
+    }
+});
+
+// Вход
+
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Email и пароль обязательны' });
+    }
+
+    const users = getUsers();
+    const user = users.find(u => u.email === email);
+
+    if (!user) {
+        return res.status(401).json({ error: 'Неверный email или пароль' });
+    }
+
+    try {
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Неверный email или пароль' });
+        }
+
+        const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: '1h' });
+        res.json({ success: true, token, user: { id: user.id, name: user.name, email: user.email, phone: user.phone } });
+    } catch (error) {
+        console.error('Ошибка входа:', error);
+        res.status(500).json({ error: 'Ошибка сервера' });
+    }
+});
+
+// Покупка абонемента
+app.post('/api/subscribe', authenticateToken, async (req, res) => {
+    console.log('Получен запрос на покупку абонемента:', req.body);
+
+    const { subscriptionType: type, groupId } = req.body;
+
+    if (!type || !groupId) {
+        console.error('Отсутствуют обязательные поля:', { type, groupId });
+        return res.status(400).json({ error: 'Тип абонемента и ID группы обязательны' });
+    }
+
+    if (!["8", "4", "1"].includes(type)) {
+        return res.status(400).json({ error: 'Неверный тип абонемента' });
+    }
+
+    try {
+        // Получаем данные групп
+        const groups = await new Promise((resolve, reject) => {
+            const groupsList = [];
+            fs.createReadStream(GROUPS_FILE)
+                .pipe(csv({ separator: ';' }))
+                .on('data', (row) => groupsList.push({
+                    Ссылка: extractGroupId(row.Ссылка),
+                    Наименование: row.Наименование,
+                    Направление: row.Направление,
+                    Расписание: row.Расписание,
+                    Преподаватель: row.Преподаватель,
+                    Адрес: row.Адрес,
+                    МаксимальноеКоличествоМест: parseInt(row.МаксимальноеКоличествоМест) || 0
+                }))
+                .on('end', () => resolve(groupsList))
+                .on('error', reject);
+        });
+
+        // Получаем данные пользователя
+        const users = getUsers();
+        const user = users.find(u => u.email === req.user.email);
+        if (!user) {
+            return res.status(404).json({ error: 'Пользователь не найден' });
+        }
+
+        // Проверяем, что группа существует
+        const group = groups.find(g => g.Ссылка === groupId);
+        if (!group) {
+            return res.status(404).json({ error: 'Группа не найдена' });
+        }
+
+        // Проверяем, что пользователь записан в группу
+        if (!user.groups || !user.groups.some(g => extractGroupId(g.Ссылка) === groupId)) {
+            return res.status(400).json({ error: 'Вы не записаны в эту группу' });
+        }
+
+        // Определяем параметры абонемента
+        let price, durationDays, classes, subscriptionName;
+        switch (type) {
+            case '8':
+                price = 5000;
+                durationDays = 28;
+                classes = 8;
+                subscriptionName = '8 занятий';
+                break;
+            case '4':
+                price = 3000;
+                durationDays = 28;
+                classes = 4;
+                subscriptionName = '4 занятия';
+                break;
+            case '1':
+                price = 800;
+                durationDays = 7;
+                classes = 1;
+                subscriptionName = 'Разовое занятие';
+                break;
+            default:
+                return res.status(400).json({ error: 'Неверный тип абонемента' });
+        }
+
+        const purchaseDate = new Date();
+        const expiryDate = new Date();
+        expiryDate.setDate(purchaseDate.getDate() + durationDays);
+
+        const formattedDate = purchaseDate.toLocaleDateString('ru-RU', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        }).replace(/\./g, '.');
+
+        // Генерируем номер абонемента
+        const subscriptions = getSubscriptions();
+        const subscriptionNumber = (subscriptions.length + 1).toString().padStart(9, '0');
+
+        // Создаем запись об абонементе
+        const newSubscription = {
+            id: Date.now().toString(),
+            userId: user.id,
+            type,
+            price,
+            purchaseDate: purchaseDate.toISOString(),
+            expiryDate: expiryDate.toISOString(),
+            remaining: classes,
+            status: 'active',
+            groupId,
+            subscriptionNumber,
+            formattedDate,
+            subscriptionName,
+            groupName: group.Наименование,
+            teacher: group.Преподаватель,
+            userName: user.name
+        };
+
+        // Сохраняем абонемент
+        subscriptions.push(newSubscription);
+        saveSubscriptions(subscriptions);
+
+        // Записываем в CSV
+        const csvRow = [
+            subscriptionNumber,
+            formattedDate,
+            type === '1' ? 'Разовое занятие' : `${classes} занятий`,
+            subscriptionName,
+            group.Преподаватель,
+            group.Преподаватель,
+            groupId,
+            group.Наименование,
+            user.id,
+            user.name,
+            price.toLocaleString('ru-RU', { minimumFractionDigits: 2 }).replace(',', ' '),
+            classes
+        ].join(';') + '\r\n';
+
+        fs.appendFileSync(SUBSCRIPTIONS_CSV, csvRow, 'utf8');
+
+        // Отправляем email
+        const mailOptions = {
+            from: '"Школа Танца" <no-reply@dance-school.ru>',
+            to: user.email,
+            subject: `Покупка абонемента на ${classes} занятий`,
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #A1004F;">Спасибо за покупку абонемента!</h2>
+                    <p>Здравствуйте, ${user.name}!</p>
+                    <p>Вы успешно приобрели абонемент на ${classes} занятий в группу "${group.Наименование}".</p>
+                    
+                    <div style="background: #FAF4FF; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                        <p><strong>Тип абонемента:</strong> ${classes} занятий</p>
+                        <p><strong>Группа:</strong> ${group.Наименование}</p>
+                        <p><strong>Преподаватель:</strong> ${group.Преподаватель}</p>
+                        <p><strong>Сумма:</strong> ${price} руб.</p>
+                        <p><strong>Дата покупки:</strong> ${purchaseDate.toLocaleDateString('ru-RU')}</p>
+                        <p><strong>Действителен до:</strong> ${expiryDate.toLocaleDateString('ru-RU')}</p>
+                    </div>
+                    
+                    <p>Ждем вас на занятиях!</p>
+                    <p style="color: #777; font-size: 12px;">
+                        Это письмо сформировано автоматически, пожалуйста, не отвечайте на него.
+                    </p>
+                </div>
+            `
+        };
+
+        transporter.sendMail(mailOptions);
+
+        res.json({
+            success: true,
+            message: 'Абонемент успешно приобретен',
+            subscription: newSubscription
+        });
+
+    } catch (error) {
+        console.error('Ошибка покупки абонемента:', error);
+        res.status(500).json({ error: 'Ошибка сервера' });
+    }
+});
+
+// Обработка формы контактов
+app.post('/submit-contact', (req, res) => {
+    const { name, email, phone, message } = req.body;
+
+    if (!name || !email || !message) {
+        return res.status(400).json({ error: 'Имя, email и сообщение обязательны для заполнения' });
+    }
+
+    const mailOptions = {
+        from: '"Школа Танца" <no-reply@dance-school.ru>',
+        to: 'shokoladpailsin@gmail.com',
+        subject: `Новый вопрос от ${name}`,
+        text: `
+            Имя: ${name}
+            Email: ${email}
+            Телефон: ${phone || 'не указан'}
+            Сообщение: ${message}
+        `,
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #A1004F;">Новый вопрос от ${name}</h2>
+                <p><strong>Email:</strong> ${email}</p>
+                ${phone ? `<p><strong>Телефон:</strong> ${phone}</p>` : ''}
+                <p><strong>Сообщение:</strong></p>
+                <div style="background: #FAF4FF; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    ${message.replace(/\n/g, '<br>')}
+                </div>
+                <p style="margin-top: 20px; color: #777; font-size: 12px;">
+                    Это сообщение отправлено с сайта Школы Танца
+                </p>
+            </div>
+        `
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Ошибка отправки:', error);
+            return res.status(500).json({ error: 'Не удалось отправить сообщение' });
+        }
+        res.json({ success: true, message: 'Ваш вопрос отправлен!' });
+    });
+});
+
+// Экспорт данных студентов
+app.get('/export-students', (req, res) => {
+    try {
+        if (!fs.existsSync(STUDENTS_FILE)) {
+            return res.status(404).json({ error: 'Файл данных не найден' });
+        }
+
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename=students.csv');
+
+        const fileStream = fs.createReadStream(STUDENTS_FILE);
+        fileStream.pipe(res);
+    } catch (error) {
+        console.error('Ошибка экспорта:', error);
+        res.status(500).json({ error: 'Ошибка сервера при экспорте данных' });
+    }
+});
+
+// Вспомогательные функции
+function getUsers() {
+    try {
+        return JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+    } catch {
+        return [];
+    }
+}
+
+function saveUsers(users) {
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+}
+
+function getSubscriptions() {
+    try {
+        const data = fs.readFileSync(SUBSCRIPTIONS_FILE, 'utf8');
+        return JSON.parse(data);
+    } catch (err) {
+        if (err.code === 'ENOENT') {
+            return [];
+        }
+        throw err;
+    }
+}
+
+function saveSubscriptions(subscriptions) {
+    fs.writeFileSync(SUBSCRIPTIONS_FILE, JSON.stringify(subscriptions, null, 2));
+}
+
+function getNextCode() {
+    try {
+        if (!fs.existsSync(STUDENTS_FILE)) return '000000001';
+
+        const data = fs.readFileSync(STUDENTS_FILE, 'utf8');
+        const lines = data.split(/\r?\n/).filter(line => line.trim() !== '');
+        let maxCode = 0;
+
+        for (const line of lines) {
+            const codePart = line.split(';')[0];
+            const codeNum = parseInt(codePart, 10);
+            if (!isNaN(codeNum)) {
+                maxCode = Math.max(maxCode, codeNum);
+            }
+        }
+
+        return (maxCode + 1).toString().padStart(9, '0');
+    } catch (err) {
+        console.error('Ошибка при генерации кода:', err);
+        return '000000001';
+    }
+}
+
+// Инициализация при запуске
+initializeDataFiles();
+
+// Запуск сервера
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Сервер запущен на порту ${PORT}`);
+});

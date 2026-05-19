@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Расписание — Школа танца</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Futura PT', 'Arial', sans-serif;
+            background-color: white;
+            color: black;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        header {
+            background: #FA98C8;
+            padding: 40px 360px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 104px;
+            flex-grow: 1;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            line-height: 0.9;
+        }
+
+            .logo .top {
+                font-weight: 700;
+                font-size: 22px;
+            }
+
+            .logo .bottom {
+                font-weight: 400;
+                font-size: 22px;
+            }
+
+        nav {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+            nav a {
+                text-decoration: none;
+                color: #FFCFE7;
+                font-size: 24px;
+                font-weight: 500;
+                transition: color 0.3s;
+            }
+
+                nav a:hover {
+                    color: #FAF4FF;
+                }
+
+                nav a.active {
+                    color: #FFFFFF;
+                }
+
+        .signup-button {
+            background-color: white;
+            color: #FA98C8;
+            padding: 8px 20px;
+            border-radius: 25px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+            .signup-button:hover {
+                background-color: #FFCFE7;
+            }
+
+        .page-wrapper {
+            padding: 80px 360px;
+        }
+
+        .page-title {
+            color: #120020;
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        /* Стили для фильтров */
+        .filters-container {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .filter-label {
+            font-size: 18px;
+            font-weight: 500;
+            color: #120020;
+        }
+
+        .filter-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 250px;
+            padding: 12px 40px 12px 16px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            background-color: white;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+        }
+
+            .filter-select:hover {
+                border-color: #999;
+            }
+
+            .filter-select:focus {
+                border-color: #FA98C8;
+                box-shadow: 0 0 0 2px rgba(250, 152, 200, 0.2);
+            }
+
+        /* Таблица с горизонтальной прокруткой */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-top: 20px;
+        }
+
+        table.schedule-table {
+            min-width: 800px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #ccc;
+            text-align: center;
+            vertical-align: top;
+            padding: 12px 8px;
+        }
+
+        .schedule-table th {
+            background-color: #f9f9f9;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .time-column {
+            width: 80px;
+            background-color: #f3f3f3;
+            font-weight: 500;
+        }
+
+        .lesson {
+            background-color: #FA98C8;
+            border-radius: 8px;
+            color: white;
+            padding: 8px;
+            font-size: 12px;
+            line-height: 1.4;
+            margin: 4px 0;
+        }
+
+        .lesson-title {
+            font-weight: bold;
+            display: block;
+            font-size: 13px;
+        }
+
+        .lesson-instructor {
+            margin-top: 4px;
+            display: block;
+            font-size: 11px;
+        }
+
+        .lesson-address {
+            margin-top: 4px;
+            display: block;
+            font-size: 10px;
+        }
+
+        footer {
+            background: #F4E5FF;
+            padding: 60px 360px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            color: #FA98C8;
+            margin-top: 40px;
+        }
+
+        .footer-column {
+            font-size: 22px;
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 24px;
+        }
+
+            .footer-column a {
+                display: block;
+                color: #FA98C8;
+                text-decoration: none;
+                margin-bottom: 8px;
+                font-size: 22px;
+                transition: color 0.3s;
+            }
+
+                .footer-column a:hover {
+                    color: #A1004F;
+                }
+
+        .social-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .social-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+            .social-link img {
+                width: 22px;
+                height: 22px;
+            }
+
+        .footer-logo {
+            font-size: 24px;
+            line-height: 0.9;
+        }
+
+        .footer-phone {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        /* Адаптация для мобильных устройств */
+        @media (max-width: 1200px) {
+            header {
+                padding: 30px 50px;
+            }
+
+            .page-wrapper {
+                padding: 40px 50px;
+            }
+
+            footer {
+                padding: 40px 50px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 20px;
+                flex-direction: column;
+            }
+
+            .header-left {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+                nav a {
+                    font-size: 18px;
+                }
+
+            .signup-button {
+                font-size: 18px;
+                padding: 6px 16px;
+            }
+
+            .page-wrapper {
+                padding: 30px 20px;
+            }
+
+            .page-title {
+                font-size: 32px;
+            }
+
+            .filters-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .filter-group {
+                flex-wrap: wrap;
+            }
+
+            .filter-select {
+                width: 100%;
+            }
+
+            footer {
+                padding: 30px 20px;
+            }
+
+            .footer-column {
+                font-size: 16px;
+                min-width: 150px;
+            }
+
+                .footer-column a {
+                    font-size: 16px;
+                }
+
+            .footer-phone {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="http://localhost/my-node-form/data/media/avatar.png" alt="Логотип" height="40">
+                    <div class="logo">
+                        <div class="top">ШКОЛА ТАНЦА</div>
+                        <div class="bottom">Алисы Шарко</div>
+                    </div>
+                </div>
+                <nav>
+                    <a href="home.html">Главная</a>
+                    <a href="schedule.html" class="active">Расписание</a>
+                    <a href="subscriptions.html">Абонементы</a>
+                    <a href="about.html">О нас</a>
+                    <a href="contacts.html">Контакты</a>
+                </nav>
+            </div>
+            <a href="login.html" class="signup-button">Личный кабинет</a>
+        </header>
+
+        <div class="page-wrapper">
+            <div class="page-title">РАСПИСАНИЕ</div>
+
+            <!-- Фильтры -->
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label for="instructor-filter" class="filter-label">Преподаватель:</label>
+                    <select id="instructor-filter" class="filter-select">
+                        <option value="all">Все преподаватели</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="address-filter" class="filter-label">Адрес:</label>
+                    <select id="address-filter" class="filter-select">
+                        <option value="all">Все адреса</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th class="time-column">Время</th>
+                            <th>ПН</th>
+                            <th>ВТ</th>
+                            <th>СР</th>
+                            <th>ЧТ</th>
+                            <th>ПТ</th>
+                            <th>СБ</th>
+                            <th>ВС</th>
+                        </tr>
+                    </thead>
+                    <tbody id="schedule-body">
+                        <!-- Расписание будет заполнено JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-column footer-logo"><strong>ШКОЛА ТАНЦА</strong><br>Алисы Шарко</div>
+            <div class="footer-column">
+                <a href="home.html">Главная</a>
+                <a href="schedule.html">Расписание</a>
+                <a href="subscriptions.html">Абонементы</a>
+                <a href="about.html">О нас</a>
+                <a href="contacts.html">Контакты</a>
+            </div>
+            <div class="footer-column">
+                <div class="social-title">Соцсети:</div>
+                <div class="social-block">
+                    <div class="social-link">
+                        <img src="http://localhost/my-node-form/data/media/vk.svg" alt="VK">
+                        <a href="https://vk.com/club11836916" target="_blank">vk.com/club11836916</a>
+                    </div>
+                    <div class="social-link">
+                        <img src="http://localhost/my-node-form/data/media/tg.svg" alt="Telegram">
+                        <a href="https://t.me/atrokhina_darya" target="_blank">@atrokhina_darya</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-column">
+                Вопросы по телефону:<br>
+                <div class="footer-phone">+7 (978) 000-00-00</div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const instructorFilter = document.getElementById('instructor-filter');
+            const addressFilter = document.getElementById('address-filter');
+            const scheduleBody = document.getElementById('schedule-body');
+
+            // ДЕМО-ДАННЫЕ РАСПИСАНИЯ
+            const demoLessons = [
+                { time: "10:00", day: "пн", group: "High Heels (нач.)", instructor: "Алиса Шарко", address: "ул. Северная, 2" },
+                { time: "10:00", day: "ср", group: "High Heels (нач.)", instructor: "Алиса Шарко", address: "ул. Северная, 2" },
+                { time: "10:00", day: "пт", group: "High Heels (нач.)", instructor: "Алиса Шарко", address: "ул. Северная, 2" },
+
+                { time: "12:00", day: "вт", group: "Stretching", instructor: "Екатерина Струкова", address: "ул. Северная, 2" },
+                { time: "12:00", day: "чт", group: "Stretching", instructor: "Екатерина Струкова", address: "ул. Северная, 2" },
+
+                { time: "15:00", day: "пн", group: "Contemporary", instructor: "Алиса Шарко", address: "ул. Адмирала Фадева, 48" },
+                { time: "15:00", day: "ср", group: "Contemporary", instructor: "Алиса Шарко", address: "ул. Адмирала Фадева, 48" },
+
+                { time: "17:00", day: "вт", group: "Jazz-Funk", instructor: "Екатерина Струкова", address: "ул. Адмирала Фадева, 48" },
+                { time: "17:00", day: "чт", group: "Jazz-Funk", instructor: "Екатерина Струкова", address: "ул. Адмирала Фадева, 48" },
+                { time: "17:00", day: "сб", group: "Jazz-Funk", instructor: "Екатерина Струкова", address: "ул. Адмирала Фадева, 48" },
+
+                { time: "19:00", day: "пн", group: "High Heels (прод.)", instructor: "Алиса Шарко", address: "ул. Северная, 2" },
+                { time: "19:00", day: "ср", group: "High Heels (прод.)", instructor: "Алиса Шарко", address: "ул. Северная, 2" },
+                { time: "19:00", day: "пт", group: "High Heels (прод.)", instructor: "Алиса Шарко", address: "ул. Северная, 2" },
+                { time: "19:00", day: "сб", group: "High Heels (прод.)", instructor: "Алиса Шарко", address: "ул. Северная, 2" },
+
+                { time: "20:00", day: "вт", group: "Contemporary (прод.)", instructor: "Алиса Шарко", address: "ул. Адмирала Фадева, 48" },
+                { time: "20:00", day: "чт", group: "Contemporary (прод.)", instructor: "Алиса Шарко", address: "ул. Адмирала Фадева, 48" },
+                { time: "20:00", day: "вс", group: "Contemporary (прод.)", instructor: "Алиса Шарко", address: "ул. Адмирала Фадева, 48" }
+            ];
+
+            // Создаем массив времени с 7:00 до 23:00
+            const times = [];
+            for (let hour = 7; hour <= 23; hour++) {
+                times.push(`${hour.toString().padStart(2, '0')}:00`);
+            }
+
+            // Создаем структуру таблицы
+            times.forEach(time => {
+                const row = document.createElement('tr');
+                const timeCell = document.createElement('td');
+                timeCell.className = 'time-column';
+                timeCell.textContent = time;
+                row.appendChild(timeCell);
+
+                for (let i = 0; i < 7; i++) {
+                    const cell = document.createElement('td');
+                    row.appendChild(cell);
+                }
+                scheduleBody.appendChild(row);
+            });
+
+            // Функция для получения индекса дня недели
+            function getDayIndex(dayName) {
+                const daysMap = {
+                    'пн': 1, 'вт': 2, 'ср': 3,
+                    'чт': 4, 'пт': 5, 'сб': 6, 'вс': 7
+                };
+                return daysMap[dayName] !== undefined ? daysMap[dayName] : -1;
+            }
+
+            // Функция для заполнения расписания
+            function populateSchedule(data) {
+                document.querySelectorAll('.schedule-table td:not(.time-column)').forEach(cell => {
+                    cell.innerHTML = '';
+                });
+
+                data.forEach(item => {
+                    if (!item.time || !item.day) return;
+
+                    const timeRows = document.querySelectorAll('.schedule-table tbody tr');
+                    let targetRow = null;
+
+                    for (let row of timeRows) {
+                        if (row.cells[0].textContent === item.time) {
+                            targetRow = row;
+                            break;
+                        }
+                    }
+                    if (!targetRow) return;
+
+                    const dayIndex = getDayIndex(item.day);
+                    if (dayIndex === -1) return;
+
+                    const lessonDiv = document.createElement('div');
+                    lessonDiv.className = 'lesson';
+                    lessonDiv.setAttribute('data-instructor', item.instructor || '');
+                    lessonDiv.setAttribute('data-address', item.address || '');
+
+                    const titleSpan = document.createElement('span');
+                    titleSpan.className = 'lesson-title';
+                    titleSpan.textContent = item.group || '';
+
+                    const instructorSpan = document.createElement('span');
+                    instructorSpan.className = 'lesson-instructor';
+                    instructorSpan.textContent = `${item.instructor || ''}`;
+
+                    const addressSpan = document.createElement('span');
+                    addressSpan.className = 'lesson-address';
+                    addressSpan.textContent = `${item.address || ''}`;
+
+                    lessonDiv.appendChild(titleSpan);
+                    lessonDiv.appendChild(instructorSpan);
+                    lessonDiv.appendChild(addressSpan);
+
+                    targetRow.cells[dayIndex].appendChild(lessonDiv);
+                });
+            }
+
+            // Функция для применения фильтров
+            function applyFilters() {
+                const selectedInstructor = instructorFilter.value;
+                const selectedAddress = addressFilter.value;
+                const lessons = document.querySelectorAll('.lesson');
+
+                lessons.forEach(lesson => {
+                    const instructor = lesson.getAttribute('data-instructor');
+                    const address = lesson.getAttribute('data-address');
+
+                    const instructorMatch = selectedInstructor === 'all' || instructor === selectedInstructor;
+                    const addressMatch = selectedAddress === 'all' || address === selectedAddress;
+
+                    lesson.style.display = (instructorMatch && addressMatch) ? 'block' : 'none';
+                });
+            }
+
+            // Обновление фильтров
+            function updateFilters() {
+                const instructors = new Set();
+                const addresses = new Set();
+                demoLessons.forEach(item => {
+                    if (item.instructor) instructors.add(item.instructor);
+                    if (item.address) addresses.add(item.address);
+                });
+
+                instructorFilter.innerHTML = '<option value="all">Все преподаватели</option>';
+                instructors.forEach(instructor => {
+                    const option = document.createElement('option');
+                    option.value = instructor;
+                    option.textContent = instructor;
+                    instructorFilter.appendChild(option);
+                });
+
+                addressFilter.innerHTML = '<option value="all">Все адреса</option>';
+                addresses.forEach(address => {
+                    const option = document.createElement('option');
+                    option.value = address;
+                    option.textContent = address;
+                    addressFilter.appendChild(option);
+                });
+            }
+
+            populateSchedule(demoLessons);
+            updateFilters();
+
+            instructorFilter.addEventListener('change', applyFilters);
+            addressFilter.addEventListener('change', applyFilters);
+        });
+    </script>
+</body>
+</html>

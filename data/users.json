@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1747761469409",
+    "name": "Вебова Вебана Вебная",
+    "email": "web@yandex.ru",
+    "phone": "+7 (909) 222-22-22",
+    "password": "$2b$10$IBlRj7S.2aT3ghxU/.rda.N1wjkOB5uyKIlItM6/Gxlm9OWMtzqAC",
+    "groups": [
+      {
+        "id": "lq1mjm8x",
+        "reference": "",
+        "name": "Продвинутая Frame Up Strip",
+        "direction": "Frame up strip",
+        "schedule": "вт, чт, 18.00-19.00",
+        "instructor": "Шарко Алиса Игоревна",
+        "address": "ул. Северная, д.2, малый зал",
+        "maxSeats": 5
+      }
+    ],
+    "createdAt": "2025-05-20T17:17:49.410Z"
+  },
+  {
+    "id": "1747921832443",
+    "name": "Браузерная Брау Браувна",
+    "email": "syper@mail.ru",
+    "phone": "+7 (888) 888-88-88",
+    "password": "$2b$10$b/aIrJcTRkDyTRaJm8dw4.rhtF.IAZgBLfdBVYZPqE3Xqh8sKVMPG",
+    "groups": [
+      {
+        "id": "xza83ism",
+        "reference": "",
+        "name": "Курс к 8 марта",
+        "direction": "High heels",
+        "schedule": "Понедельник, среда, 12.00-13.00",
+        "instructor": "Струкова Екатерина Дмитриевна",
+        "address": "ул. Северная, д.2, большой зал",
+        "maxSeats": 10
+      }
+    ],
+    "createdAt": "2025-05-22T13:50:32.443Z"
+  }
+]
