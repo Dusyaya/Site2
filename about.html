@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>О нас — Школа танца</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Futura PT', sans-serif;
+            background-color: white;
+            color: black;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        header {
+            background: #FA98C8;
+            padding: 40px 360px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 104px;
+            flex-grow: 1;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            line-height: 0.9;
+        }
+
+            .logo .top {
+                font-weight: 700;
+                font-size: 22px;
+            }
+
+            .logo .bottom {
+                font-weight: 400;
+                font-size: 22px;
+            }
+
+        nav {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+            nav a {
+                text-decoration: none;
+                color: #FFCFE7;
+                font-size: 24px;
+                font-weight: 500;
+                transition: color 0.3s;
+            }
+
+                nav a:hover {
+                    color: #FAF4FF;
+                }
+
+                nav a.active {
+                    color: #FFFFFF;
+                }
+
+            nav .button {
+                background-color: #000;
+                color: #FA98C8;
+                padding: 8px 16px;
+                border-radius: 20px;
+                margin-left: 20px;
+                transition: background-color 0.3s;
+                text-decoration: none;
+                font-size: 24px;
+                font-weight: 500;
+            }
+
+                nav .button:hover {
+                    background-color: #333;
+                }
+
+        .signup-button {
+            background-color: white;
+            color: #FA98C8;
+            padding: 8px 20px;
+            border-radius: 25px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+            .signup-button:hover {
+                background-color: #FFCFE7;
+            }
+
+            .signup-button:active {
+                background-color: #A1004F;
+            }
+
+        .logout {
+            color: white;
+            font-size: 24px;
+            font-weight: 400;
+            text-decoration: underline;
+        }
+
+        .about-wrapper {
+            padding: 120px 360px;
+        }
+
+        .page-title {
+            color: #120020;
+            font-family: "Futura PT", sans-serif;
+            font-size: 64px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 20px;
+            margin-bottom: 80px;
+        }
+
+        .about-section {
+            display: flex;
+            gap: 64px;
+            align-items: flex-start;
+            flex-wrap: nowrap;
+        }
+
+        .about-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .section-title {
+            color: #A1004F;
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 76px;
+            letter-spacing: 0.5px;
+        }
+
+        .section-description {
+            font-size: 24px;
+            line-height: 32px;
+            letter-spacing: 0.5px;
+        }
+
+        .teacher-card {
+            flex: 1;
+            text-align: center;
+        }
+
+            .teacher-card img {
+                width: 100%;
+                max-width: 100%;
+                border-radius: 24px;
+                display: block;
+            }
+
+        .teacher-name {
+            margin-top: 12px;
+            font-weight: 600;
+            color: #A1004F;
+            font-size: 18px;
+        }
+
+        .teacher-role {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .description-text {
+            padding: 0 360px 160px 360px;
+            font-size: 24px;
+            line-height: 32px;
+        }
+
+        .footer {
+            background: #F4E5FF;
+            padding: 60px 360px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            color: #FA98C8;
+        }
+
+        .footer-column {
+            font-size: 22px;
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 24px;
+        }
+
+            .footer-column a {
+                display: block;
+                color: #FA98C8;
+                text-decoration: none;
+                margin-bottom: 8px;
+                font-size: 22px;
+                transition: color 0.3s;
+            }
+
+                .footer-column a:hover {
+                    color: #A1004F;
+                }
+
+        .social-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .social-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+            .social-link img {
+                width: 22px;
+                height: 22px;
+            }
+
+        .footer-logo {
+            font-size: 24px;
+            line-height: 0.9;
+        }
+
+        .footer-phone {
+            font-size: 32px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <header>
+            <div class="header-left">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="http://localhost/my-node-form/data/media/avatar.png" alt="Логотип" height="40" style="background: none;">
+                    <div class="logo">
+                        <div class="top">ШКОЛА ТАНЦА</div>
+                        <div class="bottom">Алисы Шарко</div>
+                    </div>
+                </div>
+                <nav>
+                    <a href="home.html">Главная</a>
+                    <a href="schedule.html">Расписание</a>
+                    <a href="subscriptions.html">Абонементы</a>
+                    <a href="about.html" class="active">О нас</a>
+                    <a href="contacts.html">Контакты</a>
+                </nav>
+            </div>
+            <a href="login.html" class="signup-button">Записаться</a>
+        </header>
+
+        <!-- ABOUT WRAPPER -->
+        <div class="about-wrapper">
+            <div class="page-title">О НАС</div>
+
+            <div class="about-section">
+                <div class="about-text">
+                    <div class="section-title">Преподаватели</div>
+                    <div class="section-description">
+                        Все преподаватели школы имеют опыт преподавания не менее 3 лет и являются активными участницами мастер-классов от топовых педагогов российского и международного уровня. А также проходят повышения квалификации в сфере биомеханики, йоги и педагогики.
+                    </div>
+                </div>
+
+                <div class="teacher-card">
+                    <img src="http://localhost/my-node-form/data/media/avatar_alice.png" alt="Алиса Шарко">
+                    <div class="teacher-name">Алиса Шарко</div>
+                    <div class="teacher-role">Основательница, преподаватель направления High Heels</div>
+                </div>
+
+                <div class="teacher-card">
+                    <img src="http://localhost/my-node-form/data/media/avatar_katya.png" alt="Екатерина Струкова">
+                    <div class="teacher-name">Екатерина Струкова</div>
+                    <div class="teacher-role">Преподаватель направления High Heels</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="description-text">
+            <p>Школа танцев для девушек Алисы Шарко — это пространство, где каждая женщина раскрывает свою грацию, женственность и уверенность через танец. Основательница школы, Алиса Шарко, посвятила танцам более 10 лет, а её профессиональный путь включал работу за рубежом, в том числе в Китае. Этот опыт позволил ей объединить лучшие техники, создав уникальную методику, которая помогает девушкам чувствовать своё тело, развивать пластику и раскрепощаться.</p>
+            <p>Здесь нет жёстких стандартов — только индивидуальный подход, поддержка и вдохновляющая атмосфера. Сотни учениц школы уже научились двигаться легко и чувственно, обрели уверенность в себе и начали получать удовольствие от каждого танца.</p>
+            <p>Если ты хочешь раскрыть свою природную грацию, стать увереннее и научиться выражать эмоции через движение — добро пожаловать!</p>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-column footer-logo">
+                <strong>ШКОЛА ТАНЦА</strong><br>Алисы Шарко
+            </div>
+            <div class="footer-column">
+                <a href="home.html">Главная</a>
+                <a href="schedule.html">Расписание</a>
+                <a href="subscriptions.html">Абонементы</a>
+                <a href="about.html">О нас</a>
+                <a href="contacts.html">Контакты</a>
+            </div>
+            <div class="footer-column">
+                <div class="social-title">Соцсети:</div>
+                <div class="social-block">
+                    <div class="social-link">
+                        <img src="http://localhost/my-node-form/data/media/vk.svg" alt="VK">
+                        <a href="https://vk.com/club11836916" target="_blank">vk.com/club11836916</a>
+                    </div>
+                    <div class="social-link">
+                        <img src="http://localhost/my-node-form/data/media/tg.svg" alt="Telegram">
+                        <a href="https://t.me/atrokhina_darya" target="_blank">@atrokhina_darya</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-column">
+                Вопросы по телефону:<br>
+                <div class="footer-phone">+7 (978) 000-00-00</div>
+            </div>
+        </footer>
+
+    </div>
+</body>
+</html>

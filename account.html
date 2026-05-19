@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет — Школа танца</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Futura PT', sans-serif;
+            background-color: white;
+            color: black;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        header {
+            background: #FA98C8;
+            padding: 40px 360px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 104px;
+            flex-grow: 1;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            line-height: 0.9;
+        }
+
+            .logo .top {
+                font-weight: 700;
+                font-size: 22px;
+            }
+
+            .logo .bottom {
+                font-weight: 400;
+                font-size: 22px;
+            }
+
+        nav {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+            nav a {
+                text-decoration: none;
+                color: #FFCFE7;
+                font-size: 24px;
+                font-weight: 500;
+                transition: color 0.3s;
+                font-family: 'Futura PT', sans-serif;
+            }
+
+                nav a:hover {
+                    color: #FAF4FF;
+                }
+
+                nav a.active {
+                    color: #FFFFFF;
+                }
+
+        .logout {
+            color: white;
+            font-size: 24px;
+            font-weight: 400;
+            text-decoration: underline;
+            cursor: pointer;
+            font-family: 'Futura PT', sans-serif;
+            background: none;
+            border: none;
+        }
+
+        .page-wrapper {
+            padding: 80px 360px;
+        }
+
+        .page-title {
+            color: #120020;
+            font-family: "Futura PT", sans-serif;
+            font-size: 48px;
+            font-style: normal;
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+
+        .account-info {
+            background: #F4E5FF;
+            padding: 40px;
+            border-radius: 24px;
+            margin-bottom: 60px;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            width: 200px;
+            color: #A1004F;
+            font-family: 'Futura PT', sans-serif;
+        }
+
+        .subscriptions-list, .groups-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .subscription-card, .group-card {
+            background: #FAF4FF;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+            .subscription-card h3, .group-card h3 {
+                color: #A1004F;
+                font-size: 24px;
+                font-weight: 600;
+                margin-top: 0;
+                font-family: 'Futura PT', sans-serif;
+            }
+
+            .subscription-card p, .group-card p {
+                margin-bottom: 20px;
+                font-family: 'Futura PT', sans-serif;
+            }
+
+            .subscription-card .price {
+                font-size: 28px;
+                font-weight: 600;
+                margin-bottom: 20px;
+                font-family: 'Futura PT', sans-serif;
+            }
+
+        .buy-button, .join-button {
+            background: #FA98C8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            font-family: 'Futura PT', sans-serif;
+        }
+
+            .buy-button:hover, .join-button:hover {
+                background: #FFCFE7;
+            }
+
+        footer {
+            background: #F4E5FF;
+            padding: 60px 360px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            color: #FA98C8;
+        }
+
+        .footer-column {
+            font-size: 22px;
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 24px;
+            font-family: 'Futura PT', sans-serif;
+        }
+
+            .footer-column a {
+                display: block;
+                color: #FA98C8;
+                text-decoration: none;
+                margin-bottom: 8px;
+                font-size: 22px;
+                transition: color 0.3s;
+                font-family: 'Futura PT', sans-serif;
+            }
+
+                .footer-column a:hover {
+                    color: #A1004F;
+                }
+
+        .social-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            font-family: 'Futura PT', sans-serif;
+        }
+
+        .social-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+            .social-link img {
+                width: 22px;
+                height: 22px;
+            }
+
+        .footer-logo {
+            font-size: 24px;
+            line-height: 0.9;
+            font-family: 'Futura PT', sans-serif;
+        }
+
+        .footer-phone {
+            font-size: 32px;
+            font-weight: bold;
+            font-family: 'Futura PT', sans-serif;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+            .modal-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .modal {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            width: 500px;
+            max-width: 90%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #A1004F;
+            margin: 0;
+            font-family: 'Futura PT', sans-serif;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #A1004F;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #A1004F;
+            font-family: 'Futura PT', sans-serif;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #F4E5FF;
+            border-radius: 12px;
+            background-color: #FAF4FF;
+            font-size: 16px;
+            font-family: 'Futura PT', sans-serif;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .modal-button {
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: 'Futura PT', sans-serif;
+            border: none;
+        }
+
+        .modal-button-primary {
+            background: #FA98C8;
+            color: white;
+        }
+
+        .modal-button-secondary {
+            background: #F4E5FF;
+            color: #A1004F;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #FA98C8;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .status-active {
+            background: #A1E3A1;
+            color: #1A5D1A;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="http://localhost/my-node-form/data/media/avatar.png" alt="Логотип" height="40">
+                    <div class="logo">
+                        <div class="top">ШКОЛА ТАНЦА</div>
+                        <div class="bottom">Алисы Шарко</div>
+                    </div>
+                </div>
+                <nav>
+                    <a href="home.html">Главная</a>
+                    <a href="schedule.html">Расписание</a>
+                    <a href="subscriptions.html">Абонементы</a>
+                    <a href="about.html">О нас</a>
+                    <a href="contacts.html">Контакты</a>
+                </nav>
+            </div>
+            <button class="logout" id="logoutBtn">Выйти</button>
+        </header>
+
+        <div class="page-wrapper">
+            <div class="page-title">ЛИЧНЫЙ КАБИНЕТ</div>
+
+            <div class="account-info">
+                <h2>Ваши данные</h2>
+                <div class="info-row">
+                    <div class="info-label">ФИО:</div>
+                    <div id="userName"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Email:</div>
+                    <div id="userEmail"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Телефон:</div>
+                    <div id="userPhone"></div>
+                </div>
+            </div>
+
+            <h2>Ваши группы</h2>
+            <div id="userGroups" class="groups-list"></div>
+
+            <h2>Ваши абонементы</h2>
+            <div id="userSubscriptions" class="subscriptions-list"></div>
+
+            <h2>Доступные абонементы</h2>
+            <div class="subscriptions-list">
+                <div class="subscription-card">
+                    <h3>8 занятий</h3>
+                    <p>Для тех, кто настроен серьёзно. Срок действия — 4 недели.</p>
+                    <div class="price">5 000 ₽</div>
+                    <button class="buy-button" data-subscription="8">Купить</button>
+                </div>
+                <div class="subscription-card">
+                    <h3>4 занятия</h3>
+                    <p>Для тех, кто любит размеренную нагрузку. Срок действия — 4 недели.</p>
+                    <div class="price">3 000 ₽</div>
+                    <button class="buy-button" data-subscription="4">Купить</button>
+                </div>
+                <div class="subscription-card">
+                    <h3>Разовое занятие</h3>
+                    <p>Идеально, чтобы познакомиться со школой!</p>
+                    <div class="price">800 ₽</div>
+                    <button class="buy-button" data-subscription="1">Купить</button>
+                </div>
+            </div>
+
+            <h2>Доступные группы</h2>
+            <div id="availableGroups" class="groups-list"></div>
+        </div>
+
+        <footer>
+            <div class="footer-column footer-logo"><strong>ШКОЛА ТАНЦА</strong><br>Алисы Шарко</div>
+            <div class="footer-column"><a href="home.html">Главная</a><a href="schedule.html">Расписание</a><a href="subscriptions.html">Абонементы</a><a href="about.html">О нас</a><a href="contacts.html">Контакты</a></div>
+            <div class="footer-column"><div class="social-title">Соцсети:</div><div class="social-block"><div class="social-link"><img src="http://localhost/my-node-form/data/media/vk.svg" alt="VK"><a href="https://vk.com" target="_blank">vk.com/danceschool</a></div><div class="social-link"><img src="http://localhost/my-node-form/data/media/tg.svg" alt="Telegram"><a href="https://t.me" target="_blank">@danceschool</a></div></div></div>
+            <div class="footer-column">Вопросы по телефону:<br><div class="footer-phone">+7 (978) 000-00-00</div></div>
+        </footer>
+    </div>
+
+    <!-- Модальное окно -->
+    <div class="modal-overlay" id="subscriptionModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Покупка абонемента</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Тип абонемента</label>
+                    <select id="subscriptionType" class="form-select">
+                        <option value="8">8 занятий - 5 000 ₽</option>
+                        <option value="4">4 занятия - 3 000 ₽</option>
+                        <option value="1">Разовое занятие - 800 ₽</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Выберите группу</label>
+                    <select id="groupSelect" class="form-select">
+                        <option value="">-- Выберите группу --</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-button modal-button-secondary" id="modalCancel">Отмена</button>
+                <button class="modal-button modal-button-primary" id="modalConfirm">Купить</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification" style="display: none;"></div>
+
+    <script>
+        // Демо-группы
+        const DEMO_GROUPS = [
+            { id: 'g1', name: 'High Heels (начинающие)', direction: 'High Heels', schedule: 'ПН, СР 18:00', instructor: 'Алиса Шарко', address: 'ул. Северная, 2', availableSeats: 8, maxSeats: 12 },
+            { id: 'g2', name: 'High Heels (продвинутые)', direction: 'High Heels', schedule: 'ВТ, ЧТ 19:00', instructor: 'Екатерина Струкова', address: 'ул. Адмирала Фадева, 48', availableSeats: 5, maxSeats: 10 },
+            { id: 'g3', name: 'Contemporary', direction: 'Contemporary', schedule: 'ПН, СР 19:00', instructor: 'Алиса Шарко', address: 'ул. Северная, 2', availableSeats: 10, maxSeats: 15 },
+            { id: 'g4', name: 'Jazz-Funk', direction: 'Jazz-Funk', schedule: 'ВТ, ЧТ 18:00, СБ 12:00', instructor: 'Екатерина Струкова', address: 'ул. Адмирала Фадева, 48', availableSeats: 6, maxSeats: 12 },
+            { id: 'g5', name: 'Stretching', direction: 'Stretching', schedule: 'СР, ПТ 20:00', instructor: 'Алиса Шарко', address: 'ул. Северная, 2', availableSeats: 12, maxSeats: 20 }
+        ];
+
+        let currentUser = null;
+        let userGroups = [];
+        let userSubscriptions = [];
+
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.backgroundColor = isError ? '#d32f2f' : '#FA98C8';
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function saveUserData() {
+            if (currentUser) {
+                // Обновляем данные в localStorage
+                let users = JSON.parse(localStorage.getItem('demo_users') || '[]');
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    users[userIndex].groups = userGroups;
+                    users[userIndex].subscriptions = userSubscriptions;
+                    localStorage.setItem('demo_users', JSON.stringify(users));
+                }
+                localStorage.setItem('currentUser', JSON.stringify({
+                    ...currentUser,
+                    groups: userGroups,
+                    subscriptions: userSubscriptions
+                }));
+            }
+        }
+
+        function displayUserGroups() {
+            const container = document.getElementById('userGroups');
+            if (!userGroups.length) {
+                container.innerHTML = '<p>Вы пока не записаны в группы.</p>';
+                return;
+            }
+
+            container.innerHTML = userGroups.map(group => `
+                    <div class="group-card">
+                        <h3>${group.name}</h3>
+                        <p>🎯 ${group.direction}</p>
+                        <p>📅 ${group.schedule}</p>
+                        <p>👩‍🏫 ${group.instructor}</p>
+                        <p>📍 ${group.address}</p>
+                        <span class="status-active">✓ Вы записаны</span>
+                    </div>
+                `).join('');
+        }
+
+        function displayUserSubscriptions() {
+            const container = document.getElementById('userSubscriptions');
+            const activeSubs = userSubscriptions.filter(s => s.status === 'active');
+
+            if (!activeSubs.length) {
+                container.innerHTML = '<p>У вас пока нет абонементов.</p>';
+                return;
+            }
+
+            container.innerHTML = activeSubs.map(sub => {
+                const expiryDate = new Date(sub.expiryDate);
+                const today = new Date();
+                const isExpired = expiryDate < today;
+                return `
+                        <div class="subscription-card">
+                            <h3>${sub.name}</h3>
+                            <p>🎯 Группа: ${sub.groupName}</p>
+                            <p>📅 Куплен: ${sub.purchaseDate}</p>
+                            <p>⏰ Действителен до: ${sub.expiryDate}</p>
+                            <p>💪 Осталось занятий: ${sub.remaining}</p>
+                            <span class="status-active">${isExpired ? 'Истек' : 'Активен'}</span>
+                        </div>
+                    `;
+            }).join('');
+        }
+
+        function displayAvailableGroups() {
+            const container = document.getElementById('availableGroups');
+            const joinedGroupIds = userGroups.map(g => g.id);
+            const available = DEMO_GROUPS.filter(g => !joinedGroupIds.includes(g.id));
+
+            if (!available.length) {
+                container.innerHTML = '<p>Нет доступных групп для записи.</p>';
+                return;
+            }
+
+            container.innerHTML = available.map(group => `
+                    <div class="group-card">
+                        <h3>${group.name}</h3>
+                        <p>🎯 ${group.direction}</p>
+                        <p>📅 ${group.schedule}</p>
+                        <p>👩‍🏫 ${group.instructor}</p>
+                        <p>📍 ${group.address}</p>
+                        <p>🪑 Свободно мест: ${group.availableSeats}</p>
+                        <button class="join-button" data-group-id="${group.id}">Записаться</button>
+                    </div>
+                `).join('');
+
+            document.querySelectorAll('.join-button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const groupId = btn.dataset.groupId;
+                    openModal(groupId);
+                });
+            });
+        }
+
+        // Модальное окно
+        const modal = document.getElementById('subscriptionModal');
+        const groupSelect = document.getElementById('groupSelect');
+        let selectedGroupId = null;
+
+        function openModal(groupId = null) {
+            // Заполняем список групп
+            groupSelect.innerHTML = '<option value="">-- Выберите группу --</option>';
+            const joinedIds = userGroups.map(g => g.id);
+            DEMO_GROUPS.forEach(group => {
+                if (!joinedIds.includes(group.id)) {
+                    const option = document.createElement('option');
+                    option.value = group.id;
+                    option.textContent = `${group.name} (${group.instructor}) — ${group.availableSeats} мест`;
+                    groupSelect.appendChild(option);
+                }
+            });
+
+            if (groupId) {
+                groupSelect.value = groupId;
+                selectedGroupId = groupId;
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            selectedGroupId = null;
+        }
+
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        document.getElementById('modalCancel').addEventListener('click', closeModal);
+
+        document.getElementById('modalConfirm').addEventListener('click', () => {
+            const groupId = groupSelect.value;
+            const subscriptionType = document.getElementById('subscriptionType').value;
+
+            if (!groupId) {
+                showNotification('Выберите группу', true);
+                return;
+            }
+
+            const group = DEMO_GROUPS.find(g => g.id === groupId);
+            if (!group) {
+                showNotification('Группа не найдена', true);
+                return;
+            }
+
+            if (group.availableSeats <= 0) {
+                showNotification('В группе нет свободных мест', true);
+                return;
+            }
+
+            // Добавляем группу пользователю
+            userGroups.push({
+                id: group.id,
+                name: group.name,
+                direction: group.direction,
+                schedule: group.schedule,
+                instructor: group.instructor,
+                address: group.address
+            });
+
+            // Создаем абонемент
+            const classesCount = { '1': 1, '4': 4, '8': 8 };
+            const prices = { '1': 800, '4': 3000, '8': 5000 };
+            const names = { '1': 'Разовое занятие', '4': '4 занятия', '8': '8 занятий' };
+
+            const today = new Date();
+            const expiryDate = new Date();
+            expiryDate.setDate(today.getDate() + (subscriptionType === '1' ? 30 : 60));
+
+            userSubscriptions.push({
+                id: 'sub_' + Date.now(),
+                name: names[subscriptionType],
+                groupId: group.id,
+                groupName: group.name,
+                price: prices[subscriptionType],
+                purchaseDate: today.toLocaleDateString('ru-RU'),
+                expiryDate: expiryDate.toLocaleDateString('ru-RU'),
+                remaining: classesCount[subscriptionType],
+                status: 'active'
+            });
+
+            // Уменьшаем количество мест
+            group.availableSeats--;
+
+            saveUserData();
+            showNotification(`Абонемент "${names[subscriptionType]}" успешно куплен!`);
+            closeModal();
+
+            // Обновляем отображение
+            displayUserGroups();
+            displayUserSubscriptions();
+            displayAvailableGroups();
+        });
+
+        // Кнопки покупки абонементов
+        document.querySelectorAll('.buy-button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                openModal();
+                document.getElementById('subscriptionType').value = btn.dataset.subscription;
+            });
+        });
+
+        // Загрузка данных пользователя
+        function loadUserData() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (!savedUser) {
+                window.location.href = 'login.html';
+                return false;
+            }
+
+            const userData = JSON.parse(savedUser);
+            currentUser = userData;
+            userGroups = userData.groups || [];
+            userSubscriptions = userData.subscriptions || [];
+
+            document.getElementById('userName').textContent = userData.name;
+            document.getElementById('userEmail').textContent = userData.email;
+            document.getElementById('userPhone').textContent = userData.phone;
+
+            displayUserGroups();
+            displayUserSubscriptions();
+            displayAvailableGroups();
+
+            return true;
+        }
+
+        // Выход
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        });
+
+        loadUserData();
+    </script>
+</body>
+</html>
