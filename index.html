@@ -4,9 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Школа танца Алисы Шарко</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Futura+PT:wght@400;700&display=swap" rel="stylesheet">
-
     <style>
         * {
             box-sizing: border-box;
@@ -29,7 +27,7 @@
             background: white;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
         header {
@@ -42,18 +40,19 @@
         .logo {
             display: flex;
             flex-direction: column;
+            justify-content: center;
             line-height: 0.9;
         }
 
-        .logo .top {
-            font-weight: 700;
-            font-size: 22px;
-        }
+            .logo .top {
+                font-weight: 700;
+                font-size: 22px;
+            }
 
-        .logo .bottom {
-            font-weight: 400;
-            font-size: 22px;
-        }
+            .logo .bottom {
+                font-weight: 400;
+                font-size: 22px;
+            }
 
         nav {
             display: flex;
@@ -61,59 +60,59 @@
             font-size: 22px;
         }
 
-        nav .left-links {
-            display: flex;
-            gap: 30px;
-            margin-right: 495px;
-        }
+            nav .left-links {
+                display: flex;
+                gap: 30px;
+                margin-right: 495px;
+            }
 
-        nav a {
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 22px;
-            transition: color 0.3s;
-        }
+            nav a {
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 22px;
+                transition: color 0.3s;
+            }
 
-        nav .left-links a {
-            color: #FA98C8;
-        }
+            nav .left-links a {
+                color: #FA98C8;
+            }
 
-        nav .left-links a.active {
-            color: #A1004F;
-            pointer-events: none;
-        }
+                nav .left-links a.active {
+                    color: #A1004F;
+                    pointer-events: none;
+                }
 
-        nav .left-links a:hover {
-            color: #FFCFE7;
-        }
+                nav .left-links a:hover {
+                    color: #FFCFE7;
+                }
 
-        nav .register {
-            text-decoration: underline;
-            color: #000;
-            margin-right: 30px;
-            transition: color 0.3s;
-        }
+            nav .register {
+                text-decoration: underline;
+                color: #000;
+                margin-right: 30px;
+                transition: color 0.3s;
+            }
 
-        nav .register:hover {
-            color: #8B8B8B;
-        }
+                nav .register:hover {
+                    color: #8B8B8B;
+                }
 
-        nav .button {
-            background-color: #FA98C8;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            margin-left: 20px;
-            transition: background-color 0.3s;
-        }
+            nav .button {
+                background-color: #FA98C8;
+                color: white;
+                padding: 8px 16px;
+                border-radius: 20px;
+                margin-left: 20px;
+                transition: background-color 0.3s;
+            }
 
-        nav .button:hover {
-            background-color: #FFCFE7;
-        }
+                nav .button:hover {
+                    background-color: #FFCFE7;
+                }
 
-        nav .button:active {
-            background-color: #A1004F;
-        }
+                nav .button:active {
+                    background-color: #A1004F;
+                }
 
         main {
             display: flex;
@@ -142,11 +141,11 @@
             margin-bottom: 20px;
         }
 
-        .bubble.visible {
-            opacity: 1;
-            transform: translateY(0);
-            background: #F4E5FF;
-        }
+            .bubble.visible {
+                opacity: 1;
+                transform: translateY(0);
+                background: #F4E5FF;
+            }
 
         #bubble2.visible {
             background: #FAF4FF;
@@ -172,17 +171,17 @@
             cursor: pointer;
             text-align: center;
             text-decoration: none;
-            margin-top: 20px;
+            margin: 20px 0px 0px 0px;
             transition: background-color 0.3s;
         }
 
-        .btn-register:hover {
-            background-color: #FFCFE7;
-        }
+            .btn-register:hover {
+                background-color: #FFCFE7;
+            }
 
-        .btn-register:active {
-            background-color: #A1004F;
-        }
+            .btn-register:active {
+                background-color: #A1004F;
+            }
 
         .main-photo-section {
             position: relative;
@@ -207,18 +206,17 @@
             padding: 12px;
             gap: 12px;
             border-radius: 8px;
-            background: linear-gradient(90deg, rgba(248,247,249,0.26) 0%, rgba(248,247,249,0) 68.75%);
+            background: linear-gradient(90deg, rgba(248, 247, 249, 0.26) 0%, rgba(248, 247, 249, 0.00) 68.75%);
             backdrop-filter: blur(4px);
         }
 
-        .slider video {
-            height: 220px;
-            border-radius: 6px;
-            object-fit: cover;
-            transition: opacity 0.8s ease-in-out;
-            opacity: 1;
-            cursor: pointer;
-        }
+            .slider video {
+                height: 220px;
+                border-radius: 6px;
+                object-fit: cover;
+                transition: opacity 0.8s ease-in-out;
+                opacity: 1;
+            }
 
         .slider-nav {
             display: flex;
@@ -243,232 +241,127 @@
             transition: background-color 0.3s;
         }
 
-        .arrow:hover {
-            background-color: #FFCFE7;
-        }
+            .arrow:hover {
+                background-color: #FFCFE7;
+            }
 
-        .arrow:active {
-            background-color: #A1004F;
-        }
+            .arrow:active {
+                background-color: #A1004F;
+            }
     </style>
 </head>
-
 <body>
-
-<div class="wrapper">
-
-    <header>
-
-        <div class="logo">
-            <div class="top">ШКОЛА ТАНЦА</div>
-            <div class="bottom">Алисы Шарко</div>
-        </div>
-
-        <nav>
-
-            <div class="left-links">
-                <a href="index.html" class="active">Главная</a>
-                <a href="schedule.html">Расписание</a>
-                <a href="subscriptions.html">Абонементы</a>
-                <a href="about.html">О нас</a>
-                <a href="contacts.html">Контакты</a>
+    <div class="wrapper">
+        <header>
+            <div class="logo">
+                <div class="top">ШКОЛА ТАНЦА</div>
+                <div class="bottom">Алисы Шарко</div>
             </div>
-
-            <a href="login.html" class="register">Регистрация</a>
-            <a href="login.html" class="button">Личный кабинет</a>
-
-        </nav>
-
-    </header>
-
-    <main>
-
-        <div class="left-panel">
-
-            <img src="./data/media/avatar.png" class="avatar" alt="Алиса">
-
-            <div class="bubble" id="bubble1">
-
-                <strong>
-                    Приветствую тебя!<br>
-                    Меня зовут Алиса Шарко.
-                </strong>
-
-                <br><br>
-
-                Я преподаю танцы для девушек более 10 лет,
-
-                <br><br>
-
-                и уже сотни моих учениц научились чувствовать своё тело и красиво управлять им,
-                раскрыли свою женственность, сексуальность и стали увереннее в себе!
-
-                <br><br>
-
-                А значит, сможешь и ты!
-
+            <nav>
+                <div class="left-links">
+                    <a href="#" class="active">Главная</a>
+                    <a href="schedule.html">Расписание</a>
+                    <a href="subscriptions.html">Абонементы</a>
+                    <a href="about.html">О нас</a>
+                    <a href="contacts.html">Контакты</a>
+                </div>
+                <a href="login.html" class="register">Регистрация</a>
+                <a href="login.html" class="button">Личный кабинет</a>
+            </nav>
+        </header>
+        <main>
+            <div class="left-panel">
+                <img src="http://localhost/my-node-form/data/media/avatar.png" class="avatar" alt="Алиса">
+                <div class="bubble" id="bubble1">
+                    <strong>Приветствую тебя!<br>Меня зовут Алиса Шарко.</strong><br><br>
+                    Я преподаю танцы для девушек более 10 лет,<br><br>
+                    и уже сотни моих учениц научились чувствовать своё тело и красиво управлять им,
+                    раскрыли свою женственность, сексуальность и стали увереннее в себе!<br><br>
+                    А значит, сможешь и ты!
+                </div>
+                <div class="bubble" id="bubble2">
+                    <strong>На этом сайте ты можешь узнать актуальную информацию о группах</strong><br><br>
+                    Переходи в интересующий раздел верхнего меню<br><br>
+                    или сразу жми кнопку «Записаться», чтобы попасть ко мне на занятия!
+                </div>
+                <a href="login.html" class="btn-register">Записаться</a>
             </div>
-
-            <div class="bubble" id="bubble2">
-
-                <strong>
-                    На этом сайте ты можешь узнать актуальную информацию о группах
-                </strong>
-
-                <br><br>
-
-                Переходи в интересующий раздел верхнего меню
-
-                <br><br>
-
-                или сразу жми кнопку «Записаться», чтобы попасть ко мне на занятия!
-
+            <div class="main-photo-section">
+                <img src="http://localhost/my-node-form/data/media/Imgg_182.jpg" class="main-photo" alt="main">
+                <div class="slider" id="sliderContainer">
+                    <video id="video1" muted loop preload="metadata" poster="http://localhost/my-node-form/data/media/slide1.png"
+                           onclick="window.open('https://vk.com/video-11836916_456239120', '_blank')">
+                        <source src="http://localhost/my-node-form/data/media/slide1.mp4" type="video/mp4">
+                    </video>
+                    <video id="video2" muted loop preload="metadata" poster="http://localhost/my-node-form/data/media/slide2.png"
+                           onclick="window.open('https://vk.com/video-11836916_456239134', '_blank')">
+                        <source src="http://localhost/my-node-form/data/media/slide2.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="slider-nav">
+                    <button class="arrow" onclick="slide(-1)">←</button>
+                    <button class="arrow" onclick="slide(1)">→</button>
+                </div>
             </div>
+        </main>
+    </div>
 
-            <a href="login.html" class="btn-register">Записаться</a>
+    <script>
+        const videoPairs = [
+            ['slide1', 'slide2'],
+            ['slide2', 'slide3'],
+            ['slide3', 'slide1']
+        ];
+        let index = 0;
+        const videoTimes = { video1: 0, video2: 0 };
 
-        </div>
+        function slide(direction) {
+            const video1 = document.getElementById('video1');
+            const video2 = document.getElementById('video2');
+            videoTimes.video1 = video1.currentTime;
+            videoTimes.video2 = video2.currentTime;
+            video1.style.opacity = 0;
+            video2.style.opacity = 0;
 
-        <div class="main-photo-section">
+            setTimeout(() => {
+                index += direction;
+                if (index < 0) index = videoPairs.length - 1;
+                if (index >= videoPairs.length) index = 0;
 
-            <img src="./data/media/Imgg_182.JPG" class="main-photo" alt="main">
+                video1.poster = `http://localhost/my-node-form/data/media/${videoPairs[index][0]}.png`;
+                video1.children[0].src = `http://localhost/my-node-form/data/media/${videoPairs[index][0]}.mp4`;
+                video2.poster = `http://localhost/my-node-form/data/media/${videoPairs[index][1]}.png`;
+                video2.children[0].src = `http://localhost/my-node-form/data/media/${videoPairs[index][1]}.mp4`;
 
-            <div class="slider" id="sliderContainer">
+                video1.load();
+                video2.load();
 
-                <video
-                    id="video1"
-                    muted
-                    loop
-                    preload="metadata"
-                    poster="./data/media/slide1.png"
-                    onclick="window.open('https://vk.com/video-11836916_456239120', '_blank')">
+                video1.onloadedmetadata = () => video1.currentTime = videoTimes.video1;
+                video2.onloadedmetadata = () => video2.currentTime = videoTimes.video2;
 
-                    <source src="./data/media/slide1.mp4" type="video/mp4">
+                video1.style.opacity = 1;
+                video2.style.opacity = 1;
+            }, 400);
+        }
 
-                </video>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('bubble1').classList.add('visible');
+            setTimeout(() => document.getElementById('bubble2').classList.add('visible'), 1000);
 
-                <video
-                    id="video2"
-                    muted
-                    loop
-                    preload="metadata"
-                    poster="./data/media/slide2.png"
-                    onclick="window.open('https://vk.com/video-11836916_456239134', '_blank')">
-
-                    <source src="./data/media/slide2.mp4" type="video/mp4">
-
-                </video>
-
-            </div>
-
-            <div class="slider-nav">
-                <button class="arrow" onclick="slide(-1)">←</button>
-                <button class="arrow" onclick="slide(1)">→</button>
-            </div>
-
-        </div>
-
-    </main>
-
-</div>
-
-<script>
-
-    const videoPairs = [
-        ['slide1', 'slide2'],
-        ['slide2', 'slide3'],
-        ['slide3', 'slide1']
-    ];
-
-    let index = 0;
-
-    const videoTimes = {
-        video1: 0,
-        video2: 0
-    };
-
-    function slide(direction) {
-
-        const video1 = document.getElementById('video1');
-        const video2 = document.getElementById('video2');
-
-        videoTimes.video1 = video1.currentTime;
-        videoTimes.video2 = video2.currentTime;
-
-        video1.style.opacity = 0;
-        video2.style.opacity = 0;
-
-        setTimeout(() => {
-
-            index += direction;
-
-            if (index < 0) {
-                index = videoPairs.length - 1;
-            }
-
-            if (index >= videoPairs.length) {
-                index = 0;
-            }
-
-            video1.poster = `./data/media/${videoPairs[index][0]}.png`;
-            video1.children[0].src = `./data/media/${videoPairs[index][0]}.mp4`;
-
-            video2.poster = `./data/media/${videoPairs[index][1]}.png`;
-            video2.children[0].src = `./data/media/${videoPairs[index][1]}.mp4`;
-
-            video1.load();
-            video2.load();
-
-            video1.onloadedmetadata = () => {
-                video1.currentTime = videoTimes.video1;
-            };
-
-            video2.onloadedmetadata = () => {
-                video2.currentTime = videoTimes.video2;
-            };
-
-            video1.style.opacity = 1;
-            video2.style.opacity = 1;
-
-        }, 400);
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-
-        document.getElementById('bubble1').classList.add('visible');
-
-        setTimeout(() => {
-            document.getElementById('bubble2').classList.add('visible');
-        }, 1000);
-
-        ['video1', 'video2'].forEach(id => {
-
-            const video = document.getElementById(id);
-
-            video.addEventListener('mouseenter', () => {
-                video.play();
-                video.style.opacity = 1;
-            });
-
-            video.addEventListener('mouseleave', () => {
-
-                videoTimes[id] = video.currentTime;
-
-                video.pause();
-
-                video.style.opacity = 0;
-
-                setTimeout(() => {
+            ['video1', 'video2'].forEach(id => {
+                const video = document.getElementById(id);
+                video.addEventListener('mouseenter', () => {
+                    video.play();
                     video.style.opacity = 1;
-                }, 10);
-
+                });
+                video.addEventListener('mouseleave', () => {
+                    videoTimes[id] = video.currentTime;
+                    video.pause();
+                    video.style.opacity = 0;
+                    setTimeout(() => video.style.opacity = 1, 10);
+                });
             });
-
         });
-
-    });
-
-</script>
-
+    </script>
 </body>
 </html>
